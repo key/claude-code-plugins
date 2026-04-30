@@ -1,0 +1,22 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "claude-code-plugins",
+  "description": "key's personal Claude Code plugin marketplace",
+  "owner": {
+    "name": "Mitsukuni Sato"
+  },
+  "plugins": [
+    {
+      "name": "the-space-memory",
+      "description": "Cross-workspace knowledge search engine with hybrid FTS5 + vector search",
+      "category": "productivity",
+      "source": "./plugins/the-space-memory"
+    },
+    {
+      "name": "current-datetime",
+      "description": "Inject current datetime into UserPromptSubmit context (Asia/Tokyo)",
+      "category": "productivity",
+      "source": "./plugins/current-datetime"
+    }
+  ]
+}

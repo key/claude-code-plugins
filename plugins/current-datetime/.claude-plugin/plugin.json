@@ -1,0 +1,11 @@
+{
+  "name": "current-datetime",
+  "description": "Inject current datetime into UserPromptSubmit context (Asia/Tokyo)",
+  "version": "0.1.0",
+  "author": {
+    "name": "Mitsukuni Sato"
+  },
+  "repository": "https://github.com/key/claude-plugins",
+  "license": "MIT",
+  "keywords": ["datetime", "context", "hook"]
+}
