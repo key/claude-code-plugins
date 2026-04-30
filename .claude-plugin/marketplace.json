@@ -14,7 +14,7 @@
     },
     {
       "name": "current-datetime",
-      "description": "Inject current datetime into UserPromptSubmit context (Asia/Tokyo)",
+      "description": "Inject current datetime into UserPromptSubmit context",
       "category": "productivity",
       "source": "./plugins/current-datetime"
     }

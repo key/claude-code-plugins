@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "TZ=Asia/Tokyo date '+<current_datetime date=\"%Y-%m-%d\" time=\"%H:%M:%S\" day=\"%a\" tz=\"%Z\" />'"
+            "command": "date '+<current_datetime date=\"%Y-%m-%d\" time=\"%H:%M:%S\" day=\"%a\" tz=\"%Z\" />'"
           }
         ]
       }

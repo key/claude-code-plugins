@@ -24,7 +24,7 @@ plugins/
 | 名前 | 概要 |
 |---|---|
 | `the-space-memory` | クロスワークスペースのナレッジ検索（FTS5 + ベクトル）。`tsm` バイナリは別途インストールが必要 |
-| `current-datetime` | UserPromptSubmit 時に現在時刻（Asia/Tokyo）を context として注入する |
+| `current-datetime` | UserPromptSubmit 時に現在時刻（システム TZ）を context として注入する |
 
 ## ライセンス
 
