@@ -1,11 +1,6 @@
 # Changelog
 
-## [0.2.0](https://github.com/key/claude-code-plugins/compare/current-datetime-v0.1.0...current-datetime-v0.2.0) (2026-04-30)
-
-
-### ⚠ BREAKING CHANGES
-
-* /the-space-memory:setup no longer exists.
+## [0.1.1](https://github.com/key/claude-code-plugins/compare/current-datetime-v0.1.0...current-datetime-v0.1.1) (2026-04-30)
 
 ### Features
 
