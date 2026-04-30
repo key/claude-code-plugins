@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "date '+<current_datetime date=\"%Y-%m-%d\" time=\"%H:%M:%S\" day=\"%a\" tz=\"%Z\" />'"
+          }
+        ]
+      }
+    ]
+  }
+}
