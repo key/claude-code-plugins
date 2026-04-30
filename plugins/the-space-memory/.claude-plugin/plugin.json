@@ -7,5 +7,5 @@
   },
   "repository": "https://github.com/key/the-space-memory",
   "license": "MIT",
-  "keywords": ["knowledge", "search", "fts5", "vector", "rag"]
+  "keywords": ["knowledge", "search", "fts5", "vector", "rag", "japanese"]
 }
