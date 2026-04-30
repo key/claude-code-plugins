@@ -56,7 +56,7 @@ Break the user's question into multiple search queries:
 
 | Strategy | When to use | Example |
 |---|---|---|
-| **Topic split** | Multiple distinct topics | "射撃 and マイクロファクトリー" → 2 queries |
+| **Topic split** | Multiple distinct topics | "射撃 and デジファブ" → 2 queries |
 | **Timeline split** | Changes over time | "猟の変化" → early/mid/recent queries with `--recent` |
 | **Perspective split** | Multiple angles | "LoRa 山間部" → communication query + IoT query |
 | **Language split** | Mixed-language docs | Japanese query + English query |
