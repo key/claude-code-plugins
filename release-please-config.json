@@ -25,6 +25,16 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "plugins/statusline": {
+      "package-name": "statusline",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }
