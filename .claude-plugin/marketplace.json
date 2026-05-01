@@ -17,6 +17,12 @@
       "description": "Inject current datetime into UserPromptSubmit context",
       "category": "productivity",
       "source": "./plugins/current-datetime"
+    },
+    {
+      "name": "statusline",
+      "description": "Two-line statusline showing env, host, branch, model, context %, and rate-limit usage",
+      "category": "productivity",
+      "source": "./plugins/statusline"
     }
   ]
 }

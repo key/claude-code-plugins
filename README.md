@@ -8,6 +8,7 @@ key's personal Claude Code plugin marketplace.
 |---|---|
 | [`the-space-memory`](plugins/the-space-memory) | Cross-workspace knowledge search engine with hybrid FTS5 + vector search. Requires the `tsm` CLI to be installed separately. |
 | [`current-datetime`](plugins/current-datetime) | Inject current datetime (system TZ) into UserPromptSubmit context. |
+| [`statusline`](plugins/statusline) | Two-line Claude Code statusline (env, host, branch, model, context %, rate-limit). |
 
 ## Install
 

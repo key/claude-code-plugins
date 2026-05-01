@@ -25,6 +25,7 @@ plugins/
 |---|---|
 | `the-space-memory` | クロスワークスペースのナレッジ検索（FTS5 + ベクトル）。`tsm` バイナリは別途インストールが必要 |
 | `current-datetime` | UserPromptSubmit 時に現在時刻（システム TZ）を context として注入する |
+| `statusline` | env / host / branch / model / context % / rate-limit を 2 行で表示するステータスライン |
 
 ## ライセンス
 
