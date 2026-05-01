@@ -1,11 +1,16 @@
 {
   "name": "statusline",
   "description": "Two-line statusline showing env, host, branch, model, context %, and rate-limit usage",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Mitsukuni Sato"
   },
   "repository": "https://github.com/key/claude-code-plugins",
   "license": "MIT",
-  "keywords": ["statusline", "ui", "context", "rate-limit"]
+  "keywords": [
+    "statusline",
+    "ui",
+    "context",
+    "rate-limit"
+  ]
 }
