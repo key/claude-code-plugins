@@ -35,6 +35,12 @@
       "description": "Lint shell scripts with shellcheck on edit (PostToolUse)",
       "category": "linter",
       "source": "./plugins/lint-shell"
+    },
+    {
+      "name": "lint-yaml",
+      "description": "Lint YAML files with yamllint on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-yaml"
     }
   ]
 }
