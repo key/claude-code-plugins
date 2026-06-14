@@ -119,10 +119,14 @@ dev-template `secret-scan.sh` を踏襲しつつ、codex レビュー指摘（F-
    - **PreToolUse (Write)**: `tool_input.content`（これから書く内容）をスキャン。新規ファイルの
      秘密も捕捉する（F-4: ディスク上の既存ファイルではなく書き込み内容を見る）。
    - **PreToolUse (Edit)**: `tool_input.new_string`（挿入される新文字列）をスキャン（F-4）。
+   - **PreToolUse (Grep)**: `tool_input.path` が単一ファイルのときその内容をスキャン（F-5）。
+     ディレクトリ/省略時の全走査は grep 毎に高コストなため行わない。
 3. いずれも検出時は stderr に出して `exit 2`（LLM 到達前 / 書き込み前にブロック）。
 
-> **既知の限界（F-5）:** matcher は `Read|Edit|Write|Bash` のみ。`Grep`/`Glob` 等
-> 他の content-returning ツール経由の漏洩は検出しない。必要なら別途拡張する。
+matcher は `Read|Edit|Write|Bash|Grep`。
+
+> **既知の限界:** `Grep` でディレクトリ/プロジェクト全体を対象にした場合と、`Glob` 等
+> その他のツール経由の漏洩は検出しない。
 
 #### secret-scan の hooks.json マッチャ
 
@@ -133,7 +137,7 @@ dev-template `secret-scan.sh` を踏襲しつつ、codex レビュー指摘（F-
       { "hooks": [{ "type": "command", "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/secret-scan.sh" }] }
     ],
     "PreToolUse": [
-      { "matcher": "Read|Edit|Write|Bash",
+      { "matcher": "Read|Edit|Write|Bash|Grep",
         "hooks": [{ "type": "command", "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/scripts/secret-scan.sh" }] }
     ]
   }

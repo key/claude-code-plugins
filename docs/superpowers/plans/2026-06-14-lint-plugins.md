@@ -1093,7 +1093,7 @@ git commit -m "feat(lint-toml): add taplo PostToolUse lint plugin"
     ],
     "PreToolUse": [
       {
-        "matcher": "Read|Edit|Write|Bash",
+        "matcher": "Read|Edit|Write|Bash|Grep",
         "hooks": [
           {
             "type": "command",
@@ -1215,6 +1215,12 @@ case "$EVENT" in
         NEWSTR=$(printf '%s' "$INPUT" | jq -r '.tool_input.new_string // empty')
         scan_text "$NEWSTR" "edit new_string"
         ;;
+      Grep)
+        # path が単一ファイルを指すときのみ走査。
+        # ディレクトリ/省略時の全走査は grep 毎に高コストなので行わない（既知の限界）。
+        GPATH=$(printf '%s' "$INPUT" | jq -r '.tool_input.path // empty')
+        [[ -n "$GPATH" && -f "$GPATH" ]] && scan_file "$GPATH"
+        ;;
     esac
     ;;
 esac
@@ -1233,6 +1239,8 @@ exit 0
 - **PreToolUse (Read)**: 読み込もうとしている既存ファイルを gitleaks でスキャン（秘密が LLM に渡る前に）
 - **PreToolUse (Write)**: これから書く内容（`tool_input.content`）を gitleaks でスキャン（新規ファイルの秘密も捕捉）
 - **PreToolUse (Edit)**: 挿入される新文字列（`tool_input.new_string`）を gitleaks でスキャン
+- **PreToolUse (Grep)**: `tool_input.path` が単一ファイルのときその内容を gitleaks でスキャン
+  （ディレクトリ/省略時の全走査は毎回高コストなため行わない）
 - **PreToolUse (Bash)**: コマンド文字列を risky パターン（`.env` 読み出し、`id_rsa`、`~/.ssh/`、
   `.aws/credentials` 等）で判定。**この判定は gitleaks 非依存**で常に実行される
 
