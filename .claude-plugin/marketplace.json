@@ -41,6 +41,12 @@
       "description": "Lint YAML files with yamllint on edit (PostToolUse)",
       "category": "linter",
       "source": "./plugins/lint-yaml"
+    },
+    {
+      "name": "lint-python",
+      "description": "Auto-format and lint Python files with ruff on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-python"
     }
   ]
 }
