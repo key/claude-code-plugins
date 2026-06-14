@@ -47,6 +47,12 @@
       "description": "Auto-format and lint Python files with ruff on edit (PostToolUse)",
       "category": "linter",
       "source": "./plugins/lint-python"
+    },
+    {
+      "name": "lint-toml",
+      "description": "Auto-format and lint TOML files with taplo on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-toml"
     }
   ]
 }

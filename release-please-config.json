@@ -59,6 +59,12 @@
       "extra-files": [
         { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" }
       ]
+    },
+    "plugins/lint-toml": {
+      "package-name": "lint-toml",
+      "extra-files": [
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" }
+      ]
     }
   }
 }
