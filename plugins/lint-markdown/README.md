@@ -9,7 +9,8 @@ Markdown (`*.md`) を編集するたび rumdl で自動整形 + lint する Post
 
 ## 挙動
 
-`Edit`/`Write` の後に対象が `*.md` かつプロジェクト内なら `rumdl fmt` → `rumdl check` を実行。
+`Edit`/`Write` の後に対象が `*.md` かつプロジェクト内なら
+`rumdl fmt` → `rumdl check` を実行。
 check が失敗すると既定で `exit 2`（Claude に修正を促す）。
 
 ## 設定（プラグイン有効化時に尋ねられる）

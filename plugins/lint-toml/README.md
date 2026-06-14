@@ -9,7 +9,8 @@ TOML (`*.toml`) を編集するたび taplo で自動整形 + lint する PostTo
 
 ## 挙動
 
-`Edit`/`Write` の後に対象が `*.toml` かつプロジェクト内なら `taplo fmt` → `taplo check` を実行。
+`Edit`/`Write` の後に対象が `*.toml` かつプロジェクト内なら
+`taplo fmt` → `taplo check` を実行。
 check が失敗すると既定で `exit 2`。
 
 ## 設定

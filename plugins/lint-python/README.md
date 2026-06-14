@@ -9,7 +9,8 @@ Python (`*.py`) を編集するたび ruff で自動整形 + lint する PostToo
 
 ## 挙動
 
-`Edit`/`Write` の後に対象が `*.py` かつプロジェクト内なら `ruff format` → `ruff check --fix` を実行。
+`Edit`/`Write` の後に対象が `*.py` かつプロジェクト内なら
+`ruff format` → `ruff check --fix` を実行。
 check が失敗すると既定で `exit 2`。`--fix` による自動修正は block 設定に関わらず行われる。
 
 ## 設定
