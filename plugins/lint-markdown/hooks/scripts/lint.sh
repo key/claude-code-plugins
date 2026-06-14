@@ -22,6 +22,10 @@ FILE=$(jq -r '.tool_input.file_path // empty' 2>/dev/null) || exit 0
 [[ -z "${CLAUDE_PROJECT_DIR:-}" ]] && exit 0
 [[ "$FILE" != "$CLAUDE_PROJECT_DIR"/* ]] && exit 0
 
+# 実体が無いファイル（編集後に削除された等）は skip。
+# 存在しないファイルで lint が誤って失敗し exit 2 するのを防ぐ。
+[[ -f "$FILE" ]] || exit 0
+
 # ツール未導入時
 if ! command -v "$TOOL" >/dev/null 2>&1; then
   [[ "$ON_MISSING" == "warn" ]] && echo "[$PLUGIN_NAME] $TOOL が見つからないため skip しました" >&2
