@@ -664,7 +664,7 @@ git commit -m "feat(lint-yaml): add yamllint PostToolUse lint plugin"
 - Create: `plugins/lint-python/README.md`
 - Modify: `.claude-plugin/marketplace.json`, `release-please-config.json`, `.release-please-manifest.json`
 
-注: ruff は整形あり。`autofix=true` で `ruff format`。check は常に `ruff check --fix`（`--fix` の自動修正は block 設定に関わらず行う）。
+注: ruff は整形あり。`autofix=true` で `ruff format` + `ruff check --fix`、`autofix=false` で read-only な `ruff check`（rumdl/taplo と同様 autofix がファイル変更可否を制御）。
 
 - [ ] **Step 1: Create `plugins/lint-python/.claude-plugin/plugin.json`**
 
@@ -689,7 +689,7 @@ git commit -m "feat(lint-yaml): add yamllint PostToolUse lint plugin"
     "autofix": {
       "type": "boolean",
       "title": "Auto-format",
-      "description": "check 前に ruff format で自動整形する。既定 true",
+      "description": "true=ruff format で整形し ruff check --fix で自動修正する / false=read-only な ruff check のみ（ファイルを変更しない）。既定 true",
       "default": true
     },
     "block_on_error": {
@@ -755,11 +755,16 @@ if ! command -v "$TOOL" >/dev/null 2>&1; then
   exit 0
 fi
 
+# autofix 時のみ整形と --fix を行う。autofix=false なら read-only check に留める
+# （rumdl/taplo と同様、autofix がファイル変更可否を一元的に制御する）。
 if [[ "$AUTOFIX" == "true" ]]; then
   ruff format "$FILE" >/dev/null 2>&1 || true
+  check_cmd=(ruff check --fix "$FILE")
+else
+  check_cmd=(ruff check "$FILE")
 fi
 
-if output=$(ruff check --fix "$FILE" 2>&1); then
+if output=$("${check_cmd[@]}" 2>&1); then
   exit 0
 fi
 echo "$output" >&2

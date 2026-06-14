@@ -62,14 +62,14 @@ plugins/<name>/
 | key | type | default | 意味 |
 |---|---|---|---|
 | `on_missing_tool` | string | `warn` | ツール未導入時。`warn`=毎回 stderr に警告し `exit 0` / `silent`=無言で `exit 0` |
-| `autofix` | boolean | `true` | 整形ステップの実行可否。md/py/toml のみ対象。shell/yaml は整形が無いので無視 |
+| `autofix` | boolean | `true` | ファイル変更（整形・自動修正）の可否。md/py/toml のみ対象。shell/yaml は整形が無いので無視。`false` なら read-only な check のみ（py の `ruff check --fix` も `--fix` を外す） |
 | `block_on_error` | boolean | `true` | check 失敗時。`true`=出力を stderr に流し `exit 2`（Claude にエラーを通知し修正させる。PostToolUse は編集後に走るため編集自体は止まらない）/ `false`=stderr 警告のみ `exit 0` |
 
 ### secret-scan プラグインの options
 
 | key | type | default | 意味 |
 |---|---|---|---|
-| `fail_mode` | string | `closed` | gitleaks 未導入時。`closed`=`exit 2` でブロック（fail closed）/ `open`=強い警告のみ `exit 0`（fail open） |
+| `fail_mode` | string | `closed` | 依存（jq/gitleaks）未導入で走査不能なとき。`closed`=`exit 2` でブロック（fail closed）/ `open`=強い警告のみ `exit 0`（fail open） |
 
 デフォルトは安全側（`closed`）。
 
@@ -89,13 +89,14 @@ dev-template `lint.sh` のガードを引き継ぎつつ 1 言語ぶんに簡素
    - `silent`: 無言で `exit 0`。
 6. 整形対応言語（md/py/toml）で `autofix=true`（既定）なら整形コマンドを実行
    （`rumdl fmt` / `ruff format` / `taplo fmt`）。`autofix=false` なら整形をスキップ。
-7. check コマンドを実行（`rumdl check` / `shellcheck` / `yamllint` /
-   `ruff check --fix` / `taplo check`）。
+7. check コマンドを実行（`rumdl check` / `shellcheck` / `yamllint` / `taplo check`）。
+   py は `autofix=true` で `ruff check --fix`、`autofix=false` で read-only な `ruff check`。
 8. check 失敗時、`block_on_error` に従う:
    - `true`（既定）: 出力を stderr に流して `exit 2`（Claude が誤りを認識し修正できる）。
    - `false`: 出力を stderr に流すが `exit 0`（非ブロック警告）。
 
-注: `ruff check --fix` は `block_on_error=false` でも自動修正は行う（`--fix` の副作用）。
+注: `autofix` がファイル変更（整形・`--fix`）を一元的に制御する。`autofix=false` の py は
+`--fix` を外すため、`block_on_error` の値に関わらずファイルを書き換えない。
 
 ### secret-scan スクリプト
 

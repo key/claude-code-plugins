@@ -28,11 +28,16 @@ if ! command -v "$TOOL" >/dev/null 2>&1; then
   exit 0
 fi
 
+# autofix 時のみ整形と --fix を行う。autofix=false なら read-only check に留める
+# （rumdl/taplo と同様、autofix がファイル変更可否を一元的に制御する）。
 if [[ "$AUTOFIX" == "true" ]]; then
   ruff format "$FILE" >/dev/null 2>&1 || true
+  check_cmd=(ruff check --fix "$FILE")
+else
+  check_cmd=(ruff check "$FILE")
 fi
 
-if output=$(ruff check --fix "$FILE" 2>&1); then
+if output=$("${check_cmd[@]}" 2>&1); then
   exit 0
 fi
 echo "$output" >&2

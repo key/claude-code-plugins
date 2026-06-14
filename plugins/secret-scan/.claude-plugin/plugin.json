@@ -11,8 +11,8 @@
   "userConfig": {
     "fail_mode": {
       "type": "string",
-      "title": "Fail mode when gitleaks is missing",
-      "description": "gitleaks 未インストール時: closed=exit 2 でブロック（fail closed）/ open=警告のみ exit 0（fail open）。既定 closed",
+      "title": "Fail mode when jq/gitleaks is missing",
+      "description": "依存（jq または gitleaks）未インストールで走査できないとき: closed=exit 2 でブロック（fail closed）/ open=警告のみ exit 0（fail open）。既定 closed",
       "default": "closed"
     }
   }

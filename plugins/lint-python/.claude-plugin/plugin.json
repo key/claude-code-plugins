@@ -18,7 +18,7 @@
     "autofix": {
       "type": "boolean",
       "title": "Auto-format",
-      "description": "check 前に ruff format で自動整形する。既定 true",
+      "description": "true=ruff format で整形し ruff check --fix で自動修正する / false=read-only な ruff check のみ（ファイルを変更しない）。既定 true",
       "default": true
     },
     "block_on_error": {
