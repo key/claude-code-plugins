@@ -31,14 +31,18 @@ is_risky_bash() {
   if printf '%s' "$cmd" | grep -Eq "$always"; then
     return 0
   fi
-  # .env を読み出すコマンド（ただし .env.example 等サンプルのみなら許可）
+  # .env を読み出すコマンドか？
   local read_env='(cat|less|more|head|tail|bat|grep|awk|sed|source)[[:space:]]+[^|&]*\.env'
-  local sample='\.env\.(example|sample|template|dist|tmpl|tpl)'
   if printf '%s' "$cmd" | grep -Eq "$read_env"; then
-    if printf '%s' "$cmd" | grep -Eq "$sample"; then
-      return 1
+    # サンプル参照（.env.example 等）を除去してもなお .env 参照が残れば risky。
+    # .env.example のみなら除去後に .env が消えて safe。実 .env と混在する場合は
+    # 実 .env が残るため risky（`cat .env .env.example` を許可してしまう穴を防ぐ）。
+    local stripped
+    stripped=$(printf '%s' "$cmd" | sed -E 's/\.env\.(example|sample|template|dist|tmpl|tpl)//g')
+    if printf '%s' "$stripped" | grep -Eq '\.env'; then
+      return 0
     fi
-    return 0
+    return 1
   fi
   return 1
 }
