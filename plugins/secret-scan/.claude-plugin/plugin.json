@@ -1,0 +1,19 @@
+{
+  "name": "secret-scan",
+  "description": "Block secrets before they reach the LLM: scan prompts/files with gitleaks and Bash commands with risky patterns",
+  "version": "0.1.0",
+  "author": {
+    "name": "Mitsukuni Sato"
+  },
+  "repository": "https://github.com/key/claude-code-plugins",
+  "license": "MIT",
+  "keywords": ["security", "secrets", "gitleaks", "hook"],
+  "userConfig": {
+    "fail_mode": {
+      "type": "string",
+      "title": "Fail mode when gitleaks is missing",
+      "description": "gitleaks 未インストール時: closed=exit 2 でブロック（fail closed）/ open=警告のみ exit 0（fail open）。既定 closed",
+      "default": "closed"
+    }
+  }
+}

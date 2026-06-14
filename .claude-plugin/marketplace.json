@@ -53,6 +53,12 @@
       "description": "Auto-format and lint TOML files with taplo on edit (PostToolUse)",
       "category": "linter",
       "source": "./plugins/lint-toml"
+    },
+    {
+      "name": "secret-scan",
+      "description": "Block secrets before they reach the LLM: scan prompts/files with gitleaks and Bash commands with risky patterns",
+      "category": "security",
+      "source": "./plugins/secret-scan"
     }
   ]
 }
