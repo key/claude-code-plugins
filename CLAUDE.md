@@ -26,6 +26,12 @@ plugins/
 | `the-space-memory` | クロスワークスペースのナレッジ検索（FTS5 + ベクトル）。`tsm` バイナリは別途インストールが必要 |
 | `current-datetime` | UserPromptSubmit 時に現在時刻（システム TZ）を context として注入する |
 | `statusline` | env / host / branch / model / context % / rate-limit を 2 行で表示するステータスライン |
+| `lint-markdown` | `*.md` を編集時に rumdl で自動整形 + lint（PostToolUse）。rumdl が必要 |
+| `lint-shell` | `*.sh` を編集時に shellcheck で lint（PostToolUse）。shellcheck が必要 |
+| `lint-yaml` | `*.yml`/`*.yaml` を編集時に yamllint で lint（PostToolUse）。yamllint が必要 |
+| `lint-python` | `*.py` を編集時に ruff で自動整形 + lint（PostToolUse）。ruff が必要 |
+| `lint-toml` | `*.toml` を編集時に taplo で自動整形 + lint（PostToolUse）。taplo が必要 |
+| `secret-scan` | gitleaks でプロンプト/ファイルをスキャンし機密漏洩をブロック。gitleaks が必要 |
 
 ## ライセンス
 
