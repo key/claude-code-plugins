@@ -23,6 +23,12 @@
       "description": "Two-line statusline showing env, host, branch, model, context %, and rate-limit usage",
       "category": "productivity",
       "source": "./plugins/statusline"
+    },
+    {
+      "name": "lint-markdown",
+      "description": "Auto-format and lint Markdown files with rumdl on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-markdown"
     }
   ]
 }

@@ -35,6 +35,12 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "plugins/lint-markdown": {
+      "package-name": "lint-markdown",
+      "extra-files": [
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" }
+      ]
     }
   }
 }
