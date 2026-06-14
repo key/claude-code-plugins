@@ -74,7 +74,7 @@
     "block_on_error": {
       "type": "boolean",
       "title": "Block on lint error",
-      "description": "check 失敗時に exit 2 で編集をブロックし Claude に修正させる。false なら警告のみ。既定 true",
+      "description": "check 失敗時に exit 2 で Claude にエラーを通知し修正させる（PostToolUse は編集後に走るため編集自体は止められない）。false なら警告のみ。既定 true",
       "default": true
     }
   }
@@ -288,7 +288,7 @@ git commit -m "feat(lint-markdown): add rumdl PostToolUse lint plugin"
     "block_on_error": {
       "type": "boolean",
       "title": "Block on lint error",
-      "description": "shellcheck 失敗時に exit 2 で編集をブロックし Claude に修正させる。false なら警告のみ。既定 true",
+      "description": "shellcheck 失敗時に exit 2 で Claude にエラーを通知し修正させる（PostToolUse は編集後に走るため編集自体は止められない）。false なら警告のみ。既定 true",
       "default": true
     }
   }
@@ -476,7 +476,7 @@ git commit -m "feat(lint-shell): add shellcheck PostToolUse lint plugin"
     "block_on_error": {
       "type": "boolean",
       "title": "Block on lint error",
-      "description": "yamllint 失敗時に exit 2 で編集をブロックし Claude に修正させる。false なら警告のみ。既定 true",
+      "description": "yamllint 失敗時に exit 2 で Claude にエラーを通知し修正させる（PostToolUse は編集後に走るため編集自体は止められない）。false なら警告のみ。既定 true",
       "default": true
     }
   }
@@ -683,7 +683,7 @@ git commit -m "feat(lint-yaml): add yamllint PostToolUse lint plugin"
     "block_on_error": {
       "type": "boolean",
       "title": "Block on lint error",
-      "description": "ruff check 失敗時に exit 2 で編集をブロックし Claude に修正させる。false なら警告のみ。既定 true",
+      "description": "ruff check 失敗時に exit 2 で Claude にエラーを通知し修正させる（PostToolUse は編集後に走るため編集自体は止められない）。false なら警告のみ。既定 true",
       "default": true
     }
   }
@@ -883,7 +883,7 @@ git commit -m "feat(lint-python): add ruff PostToolUse lint plugin"
     "block_on_error": {
       "type": "boolean",
       "title": "Block on lint error",
-      "description": "taplo check 失敗時に exit 2 で編集をブロックし Claude に修正させる。false なら警告のみ。既定 true",
+      "description": "taplo check 失敗時に exit 2 で Claude にエラーを通知し修正させる（PostToolUse は編集後に走るため編集自体は止められない）。false なら警告のみ。既定 true",
       "default": true
     }
   }
@@ -1111,38 +1111,81 @@ git commit -m "feat(lint-toml): add taplo PostToolUse lint plugin"
 ```bash
 #!/usr/bin/env bash
 # secret-scan: UserPromptSubmit + PreToolUse hook
-# プロンプト/対象ファイルを gitleaks でスキャンし、Bash コマンドは risky パターンで判定。
-# 検出時は exit 2 で LLM 到達前にブロックする。
+# プロンプト/書き込み内容/読み込み対象を gitleaks でスキャンし、Bash コマンドは risky パターンで判定。
+# 検出時は exit 2 で LLM 到達前（または書き込み前）にブロックする。
 set -uo pipefail
 
 PLUGIN_NAME="secret-scan"
 FAIL_MODE="${CLAUDE_PLUGIN_OPTION_fail_mode:-closed}"
 
-# jq が無ければ判定不能 → スキップ
-command -v jq >/dev/null 2>&1 || exit 0
+# 依存コマンドが無いとき fail_mode に従う（closed=ブロック / open=警告のみ）
+missing_dep() {
+  echo "[$PLUGIN_NAME] $1 が見つかりません。シークレット検出が無効です。" >&2
+  if [[ "$FAIL_MODE" == "closed" ]]; then
+    echo "[$PLUGIN_NAME] fail closed: $1 を導入するまで操作をブロックします（fail_mode=open で緩和可）。" >&2
+    exit 2
+  fi
+  exit 0
+}
+
+block() {
+  echo "[$PLUGIN_NAME] 機密情報の疑い: $1" >&2
+  echo "[$PLUGIN_NAME] ブロックしました。該当箇所を除去してから再試行してください。" >&2
+  exit 2
+}
+
+# Bash の risky 判定（gitleaks 非依存・POSIX ERE のみ。macOS の BSD grep でも動く）
+is_risky_bash() {
+  local cmd="$1"
+  # 常に危険: 既知の機密パス/コマンド
+  local always='(printenv|id_rsa|id_ed25519|\.pem|~/\.ssh/|credentials\.json|\.aws/credentials|\.netrc|\.npmrc)'
+  if printf '%s' "$cmd" | grep -Eq "$always"; then
+    return 0
+  fi
+  # .env を読み出すコマンド（ただし .env.example 等サンプルのみなら許可）
+  local read_env='(cat|less|more|head|tail|bat|grep|awk|sed|source)[[:space:]]+[^|&]*\.env'
+  local sample='\.env\.(example|sample|template|dist|tmpl|tpl)'
+  if printf '%s' "$cmd" | grep -Eq "$read_env"; then
+    if printf '%s' "$cmd" | grep -Eq "$sample"; then
+      return 1
+    fi
+    return 0
+  fi
+  return 1
+}
+
+# jq が無ければ JSON を解析できない → fail_mode に従う
+command -v jq >/dev/null 2>&1 || missing_dep "jq"
 
 INPUT=$(cat)
+EVENT=$(printf '%s' "$INPUT" | jq -r '.hook_event_name // empty')
+TOOL=$(printf '%s' "$INPUT" | jq -r '.tool_name // empty')
 
-# gitleaks 未導入時の扱い（fail_mode）
-if ! command -v gitleaks >/dev/null 2>&1; then
-  echo "[$PLUGIN_NAME] gitleaks が見つかりません。シークレット検出が無効です。" >&2
-  if [[ "$FAIL_MODE" == "closed" ]]; then
-    echo "[$PLUGIN_NAME] fail closed: gitleaks を導入するまで操作をブロックします。" >&2
-    exit 2
+# Bash の risky 判定は gitleaks 不要なので先に処理する（gitleaks 不在でもバイパスさせない）
+if [[ "$EVENT" == "PreToolUse" && "$TOOL" == "Bash" ]]; then
+  CMD=$(printf '%s' "$INPUT" | jq -r '.tool_input.command // empty')
+  if [[ -n "$CMD" ]] && is_risky_bash "$CMD"; then
+    block "bash command matches risky pattern"
   fi
   exit 0
 fi
 
-EVENT=$(printf '%s' "$INPUT" | jq -r '.hook_event_name // empty')
-TOOL=$(printf '%s' "$INPUT" | jq -r '.tool_name // empty')
+# 以降のスキャンは gitleaks が必要
+command -v gitleaks >/dev/null 2>&1 || missing_dep "gitleaks"
 
-block() {
-  echo "[$PLUGIN_NAME] 機密情報の疑い: $1" >&2
-  echo "[$PLUGIN_NAME] LLM 到達前にブロックしました。該当箇所を除去してから再試行してください。" >&2
-  exit 2
+scan_text() {  # $1=対象テキスト $2=ラベル
+  local text="$1" label="$2" tmp
+  [[ -z "$text" ]] && return 0
+  tmp=$(mktemp)
+  printf '%s' "$text" >"$tmp"
+  if ! gitleaks detect --no-git --source="$tmp" --redact --log-level=error >/dev/null 2>&1; then
+    rm -f "$tmp"
+    block "$label"
+  fi
+  rm -f "$tmp"
 }
 
-scan_file() {
+scan_file() {  # $1=ファイルパス
   local path="$1"
   [[ -f "$path" ]] || return 0
   if ! gitleaks detect --no-git --source="$path" --redact --log-level=error >/dev/null 2>&1; then
@@ -1150,37 +1193,27 @@ scan_file() {
   fi
 }
 
-scan_text() {
-  local text="$1"
-  local tmp
-  tmp=$(mktemp)
-  printf '%s' "$text" >"$tmp"
-  if ! gitleaks detect --no-git --source="$tmp" --redact --log-level=error >/dev/null 2>&1; then
-    rm -f "$tmp"
-    block "prompt text"
-  fi
-  rm -f "$tmp"
-}
-
-# 読み込み動詞 + .env（非サンプル）を同一行でマッチ、または既知の機密パス/コマンド
-RISKY_BASH_RE='((cat|less|more|head|tail|bat|grep|awk|sed|source)\s+[^|&\n]*\.env(?!\.(example|sample|template|dist|tmpl|tpl))\b|\bprintenv\b|\bid_rsa\b|\bid_ed25519\b|\.pem\b|~/\.ssh/|credentials\.json|\.aws/credentials|\.netrc\b|\.npmrc\b)'
-
 case "$EVENT" in
   UserPromptSubmit)
     PROMPT=$(printf '%s' "$INPUT" | jq -r '.prompt // empty')
-    [[ -n "$PROMPT" ]] && scan_text "$PROMPT"
+    scan_text "$PROMPT" "prompt text"
     ;;
   PreToolUse)
     case "$TOOL" in
-      Read|Edit|Write)
+      Read)
+        # 読み込もうとしている既存ファイルを走査（秘密が LLM に渡る前にブロック）
         FILE=$(printf '%s' "$INPUT" | jq -r '.tool_input.file_path // empty')
         [[ -n "$FILE" ]] && scan_file "$FILE"
         ;;
-      Bash)
-        CMD=$(printf '%s' "$INPUT" | jq -r '.tool_input.command // empty')
-        if [[ -n "$CMD" ]] && printf '%s' "$CMD" | grep -qP "$RISKY_BASH_RE"; then
-          block "bash command matches risky pattern"
-        fi
+      Write)
+        # これから書く内容を走査（新規ファイルの秘密も捕捉）
+        CONTENT=$(printf '%s' "$INPUT" | jq -r '.tool_input.content // empty')
+        scan_text "$CONTENT" "write content"
+        ;;
+      Edit)
+        # 挿入される新文字列を走査
+        NEWSTR=$(printf '%s' "$INPUT" | jq -r '.tool_input.new_string // empty')
+        scan_text "$NEWSTR" "edit new_string"
         ;;
     esac
     ;;
@@ -1197,11 +1230,13 @@ exit 0
 シークレットが LLM に渡る前にブロックするセキュリティフックプラグイン。
 
 - **UserPromptSubmit**: プロンプト本文を gitleaks でスキャン
-- **PreToolUse (Read/Edit/Write)**: 対象ファイルを gitleaks でスキャン
+- **PreToolUse (Read)**: 読み込もうとしている既存ファイルを gitleaks でスキャン（秘密が LLM に渡る前に）
+- **PreToolUse (Write)**: これから書く内容（`tool_input.content`）を gitleaks でスキャン（新規ファイルの秘密も捕捉）
+- **PreToolUse (Edit)**: 挿入される新文字列（`tool_input.new_string`）を gitleaks でスキャン
 - **PreToolUse (Bash)**: コマンド文字列を risky パターン（`.env` 読み出し、`id_rsa`、`~/.ssh/`、
-  `.aws/credentials` 等）で判定
+  `.aws/credentials` 等）で判定。**この判定は gitleaks 非依存**で常に実行される
 
-検出時は `exit 2` で LLM 到達前にブロックする。
+検出時は `exit 2` でブロックする。Bash 判定は POSIX ERE（`grep -E`）のみを使い、macOS の BSD grep でも動く。
 
 ## 必要ツール
 
@@ -1230,15 +1265,20 @@ Expected: no output, exit 0.
 
 - [ ] **Step 6: Run behavioral smoke tests**
 
-Run (gitleaks がある環境では clean な入力が通ることを確認):
+Run:
 ```bash
-# clean prompt → 通る（exit 0）
-echo '{"hook_event_name":"UserPromptSubmit","prompt":"hello world"}' | bash plugins/secret-scan/hooks/scripts/secret-scan.sh; echo "clean exit=$?"
-# risky bash → ブロック（exit 2）※ gitleaks 有無に関わらずパターン判定
-echo '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"cat .env"}}' | bash plugins/secret-scan/hooks/scripts/secret-scan.sh; echo "risky exit=$?"
+# (a) risky bash `cat .env` → ブロック（exit 2）※ gitleaks 不要・jq があれば決定的
+echo '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"cat .env"}}' | bash plugins/secret-scan/hooks/scripts/secret-scan.sh; echo "a risky exit=$?"
+# (b) サンプルのみ `cat .env.example` → 許可（exit 0）
+echo '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"cat .env.example"}}' | bash plugins/secret-scan/hooks/scripts/secret-scan.sh; echo "b sample exit=$?"
+# (c) 機密パス `cat ~/.ssh/id_rsa` → ブロック（exit 2）
+echo '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"cat ~/.ssh/id_rsa"}}' | bash plugins/secret-scan/hooks/scripts/secret-scan.sh; echo "c risky exit=$?"
+# (d) 無害 bash `ls -la` → 許可（exit 0）
+echo '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"ls -la"}}' | bash plugins/secret-scan/hooks/scripts/secret-scan.sh; echo "d benign exit=$?"
 ```
-Expected: `clean exit=0`（gitleaks 導入時）、`risky exit=2`（gitleaks 導入時）。
-gitleaks 未導入時は `fail_mode` 既定 closed のため両方 `exit 2` になる（その旨を確認）。
+Expected: `a risky exit=2`, `b sample exit=0`, `c risky exit=2`, `d benign exit=0`（いずれも gitleaks 不要・jq のみで決定的）。
+gitleaks に依存する prompt/Write/Edit/Read のスキャンは gitleaks 導入環境で手動確認する
+（clean 入力が exit 0、既知のテスト用シークレットを含む入力が exit 2）。
 
 - [ ] **Step 7: Register plugin in marketplace.json**
 

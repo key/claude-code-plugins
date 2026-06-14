@@ -63,7 +63,7 @@ plugins/<name>/
 |---|---|---|---|
 | `on_missing_tool` | string | `warn` | ツール未導入時。`warn`=毎回 stderr に警告し `exit 0` / `silent`=無言で `exit 0` |
 | `autofix` | boolean | `true` | 整形ステップの実行可否。md/py/toml のみ対象。shell/yaml は整形が無いので無視 |
-| `block_on_error` | boolean | `true` | check 失敗時。`true`=出力を stderr に流し `exit 2`（ブロック）/ `false`=stderr 警告のみ `exit 0` |
+| `block_on_error` | boolean | `true` | check 失敗時。`true`=出力を stderr に流し `exit 2`（Claude にエラーを通知し修正させる。PostToolUse は編集後に走るため編集自体は止まらない）/ `false`=stderr 警告のみ `exit 0` |
 
 ### secret-scan プラグインの options
 
@@ -99,21 +99,30 @@ dev-template `lint.sh` のガードを引き継ぎつつ 1 言語ぶんに簡素
 
 ### secret-scan スクリプト
 
-dev-template `secret-scan.sh` を踏襲。
+dev-template `secret-scan.sh` を踏襲しつつ、codex レビュー指摘（F-2〜F-4, F-6）を反映する。
 
-1. `jq` が無ければ `exit 0`。
-2. `gitleaks` が無い場合、`fail_mode` に従う:
-   - `closed`（既定）: stderr に「シークレット検出が無効です。gitleaks を導入してください」と
-     強く警告して `exit 2`（ブロック）。
-   - `open`: 同じ警告を stderr に出すが `exit 0`（非ブロック）。
-3. stdin の JSON から `hook_event_name` と `tool_name` を取得し分岐:
+1. 依存コマンド未導入時は `fail_mode` に従う（`jq`・`gitleaks` 共通の `missing_dep`）:
+   - `closed`（既定）: stderr に「シークレット検出が無効です。<dep> を導入してください」と
+     強く警告して `exit 2`（fail closed）。
+   - `open`: 同じ警告を stderr に出すが `exit 0`（fail open）。
+   - `jq` が無いと JSON を解析できず一切スキャンできないため、`jq` 不在も `fail_mode` に従う
+     （F-2: 黙って素通りさせない）。
+2. `jq` で `hook_event_name` と `tool_name` を取得して分岐:
+   - **PreToolUse (Bash)**: `tool_input.command` を risky 判定。**gitleaks 非依存なので最初に処理**し、
+     gitleaks 不在でもバイパスさせない（F-3）。判定は POSIX ERE（`grep -E`）のみで実装し、
+     macOS の BSD grep でも動く（F-6: PCRE `grep -P` と否定先読みは使わない）。
+     対象: `.env` の読み出し（`.env.example` 等サンプルは許可）、`printenv`、`id_rsa`/`id_ed25519`、
+     `.pem`、`~/.ssh/`、`credentials.json`、`.aws/credentials`、`.netrc`、`.npmrc`。
+   - Bash 以外は以降 gitleaks が必要（無ければ `missing_dep`）。
    - **UserPromptSubmit**: `prompt` 本文を一時ファイルに書き出して `gitleaks detect` でスキャン。
-   - **PreToolUse (Read/Edit/Write)**: `tool_input.file_path` を `gitleaks detect` でスキャン。
-   - **PreToolUse (Bash)**: `tool_input.command` を risky 正規表現で判定。
-     （`.env` の読み出し、`printenv`、`id_rsa`/`id_ed25519`、`.pem`、`~/.ssh/`、
-     `credentials.json`、`.aws/credentials`、`.netrc`、`.npmrc` 等。dev-template の
-     `RISKY_BASH_RE` を踏襲）
-4. いずれも検出時は stderr に出して `exit 2`（LLM 到達前にブロック）。
+   - **PreToolUse (Read)**: `tool_input.file_path`（既存ファイル）を `gitleaks detect` でスキャン。
+   - **PreToolUse (Write)**: `tool_input.content`（これから書く内容）をスキャン。新規ファイルの
+     秘密も捕捉する（F-4: ディスク上の既存ファイルではなく書き込み内容を見る）。
+   - **PreToolUse (Edit)**: `tool_input.new_string`（挿入される新文字列）をスキャン（F-4）。
+3. いずれも検出時は stderr に出して `exit 2`（LLM 到達前 / 書き込み前にブロック）。
+
+> **既知の限界（F-5）:** matcher は `Read|Edit|Write|Bash` のみ。`Grep`/`Glob` 等
+> 他の content-returning ツール経由の漏洩は検出しない。必要なら別途拡張する。
 
 #### secret-scan の hooks.json マッチャ
 
