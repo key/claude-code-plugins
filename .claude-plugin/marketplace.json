@@ -29,6 +29,12 @@
       "description": "Auto-format and lint Markdown files with rumdl on edit (PostToolUse)",
       "category": "linter",
       "source": "./plugins/lint-markdown"
+    },
+    {
+      "name": "lint-shell",
+      "description": "Lint shell scripts with shellcheck on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-shell"
     }
   ]
 }

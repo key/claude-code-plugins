@@ -1,0 +1,25 @@
+{
+  "name": "lint-shell",
+  "description": "Lint shell scripts with shellcheck on edit (PostToolUse)",
+  "version": "0.1.0",
+  "author": {
+    "name": "Mitsukuni Sato"
+  },
+  "repository": "https://github.com/key/claude-code-plugins",
+  "license": "MIT",
+  "keywords": ["lint", "shell", "bash", "shellcheck"],
+  "userConfig": {
+    "on_missing_tool": {
+      "type": "string",
+      "title": "On missing tool",
+      "description": "shellcheck が未インストールのとき: warn=毎回 stderr に警告 / silent=無言。既定 warn",
+      "default": "warn"
+    },
+    "block_on_error": {
+      "type": "boolean",
+      "title": "Block on lint error",
+      "description": "shellcheck 失敗時に exit 2 で Claude にエラーを通知し修正させる（PostToolUse は編集後に走るため編集自体は止められない）。false なら警告のみ。既定 true",
+      "default": true
+    }
+  }
+}
