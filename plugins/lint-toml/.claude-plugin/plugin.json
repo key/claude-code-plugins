@@ -1,0 +1,31 @@
+{
+  "name": "lint-toml",
+  "description": "Auto-format and lint TOML files with taplo on edit (PostToolUse)",
+  "version": "0.1.0",
+  "author": {
+    "name": "Mitsukuni Sato"
+  },
+  "repository": "https://github.com/key/claude-code-plugins",
+  "license": "MIT",
+  "keywords": ["lint", "toml", "taplo", "formatter"],
+  "userConfig": {
+    "on_missing_tool": {
+      "type": "string",
+      "title": "On missing tool",
+      "description": "taplo が未インストールのとき: warn=毎回 stderr に警告 / silent=無言。既定 warn",
+      "default": "warn"
+    },
+    "autofix": {
+      "type": "boolean",
+      "title": "Auto-format",
+      "description": "check 前に taplo fmt で自動整形する。既定 true",
+      "default": true
+    },
+    "block_on_error": {
+      "type": "boolean",
+      "title": "Block on lint error",
+      "description": "taplo check 失敗時に exit 2 で Claude にエラーを通知し修正させる（PostToolUse は編集後に走るため編集自体は止められない）。false なら警告のみ。既定 true",
+      "default": true
+    }
+  }
+}

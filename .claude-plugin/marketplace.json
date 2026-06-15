@@ -23,6 +23,42 @@
       "description": "Two-line statusline showing env, host, branch, model, context %, and rate-limit usage",
       "category": "productivity",
       "source": "./plugins/statusline"
+    },
+    {
+      "name": "lint-markdown",
+      "description": "Auto-format and lint Markdown files with rumdl on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-markdown"
+    },
+    {
+      "name": "lint-shell",
+      "description": "Lint shell scripts with shellcheck on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-shell"
+    },
+    {
+      "name": "lint-yaml",
+      "description": "Lint YAML files with yamllint on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-yaml"
+    },
+    {
+      "name": "lint-python",
+      "description": "Auto-format and lint Python files with ruff on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-python"
+    },
+    {
+      "name": "lint-toml",
+      "description": "Auto-format and lint TOML files with taplo on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-toml"
+    },
+    {
+      "name": "secret-scan",
+      "description": "Block secrets before they reach the LLM: scan prompts/files with gitleaks and Bash commands with risky patterns",
+      "category": "security",
+      "source": "./plugins/secret-scan"
     }
   ]
 }

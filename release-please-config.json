@@ -35,6 +35,42 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "plugins/lint-markdown": {
+      "package-name": "lint-markdown",
+      "extra-files": [
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" }
+      ]
+    },
+    "plugins/lint-shell": {
+      "package-name": "lint-shell",
+      "extra-files": [
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" }
+      ]
+    },
+    "plugins/lint-yaml": {
+      "package-name": "lint-yaml",
+      "extra-files": [
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" }
+      ]
+    },
+    "plugins/lint-python": {
+      "package-name": "lint-python",
+      "extra-files": [
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" }
+      ]
+    },
+    "plugins/lint-toml": {
+      "package-name": "lint-toml",
+      "extra-files": [
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" }
+      ]
+    },
+    "plugins/secret-scan": {
+      "package-name": "secret-scan",
+      "extra-files": [
+        { "type": "json", "path": ".claude-plugin/plugin.json", "jsonpath": "$.version" }
+      ]
     }
   }
 }
