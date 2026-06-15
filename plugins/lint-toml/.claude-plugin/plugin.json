@@ -1,13 +1,18 @@
 {
   "name": "lint-toml",
   "description": "Auto-format and lint TOML files with taplo on edit (PostToolUse)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Mitsukuni Sato"
   },
   "repository": "https://github.com/key/claude-code-plugins",
   "license": "MIT",
-  "keywords": ["lint", "toml", "taplo", "formatter"],
+  "keywords": [
+    "lint",
+    "toml",
+    "taplo",
+    "formatter"
+  ],
   "userConfig": {
     "on_missing_tool": {
       "type": "string",
