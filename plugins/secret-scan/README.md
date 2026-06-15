@@ -26,9 +26,20 @@ macOS の BSD grep でも動く。
 
 | key | 既定 | 意味 |
 |---|---|---|
-| `fail_mode` | `closed` | gitleaks 未導入時に `closed`（`exit 2` でブロック=fail closed）/ `open`（警告のみ） |
+| `fail_mode` | `closed` | 依存（jq/gitleaks）未導入時に `closed`（`exit 2`=fail closed）/ `open`（警告のみ） |
 
-> **注意（fail closed）:** 既定では gitleaks 未導入のままだと UserPromptSubmit と
-> 全 PreToolUse が
-> `exit 2` でブロックされ、gitleaks を導入するまで操作できなくなります。緩和するには
-> `fail_mode` を `open` に設定してください。
+> **注意（fail closed）:** 既定では jq または gitleaks 未導入のままだと
+> UserPromptSubmit と全 PreToolUse が `exit 2` でブロックされ、依存を導入するまで
+> 操作できなくなります。緩和するには `fail_mode` を `open` に設定してください。
+
+## 限界（過信しないこと）
+
+これは多層防御の一層であり、**唯一の防御線として依存しないこと**。
+
+- **Bash 判定はヒューリスティック**（best-effort）。次のような経路は捕捉しない:
+  リダイレクト（`done < .env`）、`env | grep`、`xxd .env`、`. .env`（dot source）、
+  `python -c "open('.env')"` 等。逆に過剰ブロック（false positive）もあり得る。
+- **gitleaks のデフォルトルール**は `KEY = "value"` 形式は検出するが、地の文に貼られた
+  素のトークンは見逃すことがある（UserPromptSubmit のプロンプト走査で特に注意）。
+- **カバー範囲**は PreToolUse の Read/Edit/Write/Bash/Grep のみ。NotebookEdit、
+  Grep のディレクトリ走査、シンボリックリンク先などは対象外。
