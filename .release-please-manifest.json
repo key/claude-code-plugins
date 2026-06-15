@@ -6,6 +6,6 @@
   "plugins/lint-shell": "0.1.0",
   "plugins/lint-yaml": "0.1.0",
   "plugins/lint-python": "0.1.0",
-  "plugins/lint-toml": "0.1.0",
+  "plugins/lint-toml": "0.1.1",
   "plugins/secret-scan": "0.1.0"
 }
