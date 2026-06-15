@@ -1,13 +1,17 @@
 {
   "name": "lint-yaml",
   "description": "Lint YAML files with yamllint on edit (PostToolUse)",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "Mitsukuni Sato"
   },
   "repository": "https://github.com/key/claude-code-plugins",
   "license": "MIT",
-  "keywords": ["lint", "yaml", "yamllint"],
+  "keywords": [
+    "lint",
+    "yaml",
+    "yamllint"
+  ],
   "userConfig": {
     "on_missing_tool": {
       "type": "string",
