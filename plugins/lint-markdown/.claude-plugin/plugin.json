@@ -1,7 +1,7 @@
 {
   "name": "lint-markdown",
   "description": "Auto-format and lint Markdown files with rumdl on edit (PostToolUse)",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Mitsukuni Sato"
   },

@@ -1,7 +1,7 @@
 {
   "name": "lint-toml",
   "description": "Auto-format and lint TOML files with taplo on edit (PostToolUse)",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": {
     "name": "Mitsukuni Sato"
   },
