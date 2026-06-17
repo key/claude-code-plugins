@@ -16,10 +16,14 @@ else
   exit 0
 fi
 
-cd "${CLAUDE_PROJECT_DIR:-/workspaces/workspace}"
+ROOT="${CLAUDE_PROJECT_DIR:-/workspaces/workspace}"
+cd "$ROOT"
 
-# セッション JSONL ファイルを探す
-SESSIONS_DIR="$HOME/.claude/projects/-workspaces-workspace"
+# セッション JSONL ファイルを探す。
+# Claude はプロジェクトの絶対パスの "/" と "." を "-" に置換した名前で
+# ~/.claude/projects/ 配下にセッションを格納する。
+ENCODED=$(printf '%s' "$ROOT" | sed 's/[/.]/-/g')
+SESSIONS_DIR="$HOME/.claude/projects/$ENCODED"
 JSONL_FILE="$SESSIONS_DIR/$SESSION_ID.jsonl"
 
 [ ! -f "$JSONL_FILE" ] && exit 0

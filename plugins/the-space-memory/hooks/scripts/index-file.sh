@@ -16,13 +16,14 @@ else
   exit 0
 fi
 
-cd "${CLAUDE_PROJECT_DIR:-/workspaces/workspace}"
+ROOT="${CLAUDE_PROJECT_DIR:-/workspaces/workspace}"
+cd "$ROOT"
 
-# PROJECT_ROOT からの相対パスに変換
-# tsm.toml の project_root を基準にする（デフォルト /workspaces）
-REL_PATH="${FILE#/workspaces/}"
+# PROJECT_ROOT（= tsm.toml の project_root）からの相対パスに変換する。
+# 絶対パスのときは ROOT を前置から剥がす。
+REL_PATH="${FILE#"$ROOT"/}"
 
-# 相対パスに変換できなかった場合（/workspaces 以外のパス）はスキップ
+# ROOT 配下に変換できなかった場合（プロジェクト外のパス）はスキップ
 [ "$REL_PATH" = "$FILE" ] && exit 0
 
 echo "$REL_PATH" | "$TSM" index --files-from-stdin >/dev/null 2>&1
