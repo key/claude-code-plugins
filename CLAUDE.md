@@ -35,7 +35,8 @@ plugins/
 
 ## ライセンス
 
-Proprietary。依存ライセンスは MIT, BSD, ISC, Apache-2.0, Unlicense のみ許可。
+MIT（ルートの `LICENSE` 参照）。各 `plugin.json` の `license` も MIT で統一する。
+依存ライセンスは MIT, BSD, ISC, Apache-2.0, Unlicense のみ許可。
 GPL/LGPL/AGPL/MPL は不可。
 
 ## バージョニング & リリース
