@@ -21,9 +21,10 @@
 
 ## 挙動
 
-3 つのフックで動く。いずれも `CLAUDE_PROJECT_DIR` をプロジェクトルート
-（= `tsm.toml` の `project_root`）として扱い、プロジェクト外のパスや
-空クエリはスキップする。
+3 つのフックで動く。いずれもプロジェクトルート（= `tsm.toml` の
+`project_root`）を `resolve-root.sh` で解決する。解決順は
+git の common-dir の親（linked worktree からでも main を指す）→
+`CLAUDE_PROJECT_DIR` → `$PWD`。プロジェクト外のパスや空クエリはスキップする。
 
 - **`UserPromptSubmit`** — クエリで `tsm search` し、ヒットを
   `<knowledge_search>` として context に注入（`search.sh`）
@@ -31,6 +32,15 @@
   `tsm index` で索引付け（`index-file.sh`）
 - **`Stop`** — そのセッションの JSONL を `tsm ingest-session` で取り込む
   （`ingest.sh`）
+
+## 制約
+
+- linked worktree 内の `*.md` 編集の索引: tsm は `index_root`（`tsm.toml`、
+  通常は main の絶対パス）基準でファイルを読み・格納する。このため main 配下に
+  ネストした worktree の編集はネストパスで索引され main 側の同名 doc とは別
+  エントリになり、main 外の worktree は索引対象外になる。worktree パスの除外は
+  tsm 本体（`index_root` / fs-watcher）側の課題として未対応。
+  なお `doctor` / `search` / `ingest` は worktree からでも main の DB を正しく参照する。
 
 ## スキル / エージェント
 
@@ -41,7 +51,7 @@
 ## セットアップ
 
 1. `tsm` CLI をインストールして `PATH` を通す
-2. プロジェクトルートに `tsm.toml` を置き `project_root` を設定する
+2. プロジェクトルートに `tsm.toml` を置き `index_root` を設定する
 3. デーモンを起動: `tsm daemon start`（フック経由でも自動起動される）
 4. 動作確認: `tsm doctor -f json` または `/the-space-memory:doctor`
 
@@ -63,5 +73,5 @@
 | 症状 | 対処 |
 |---|---|
 | 検索が空振りする | `tsm doctor` で確認し `tsm backfill` で再生成 |
-| 索引されない | `CLAUDE_PROJECT_DIR` がルートを指すか確認 |
+| 索引されない | `resolve-root.sh` が想定のルートを返すか確認（git 管理下なら main を指す） |
 | デーモンが落ちている | `tsm daemon start` |

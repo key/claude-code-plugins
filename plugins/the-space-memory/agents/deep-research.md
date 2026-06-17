@@ -42,10 +42,12 @@ Your job is to find, read, and synthesize information across multiple documents.
 
 ## Tools
 
-The search command (always run from `$CLAUDE_PROJECT_DIR`):
+The search command (always run from the main repository top, resolved from git
+so it works even inside a linked worktree):
 
 ```bash
-cd "$CLAUDE_PROJECT_DIR" && tsm search -q "<query>" -k 10 -f json --include-content 3
+ROOT=$(git rev-parse --git-common-dir 2>/dev/null) && ROOT=$(cd "$(dirname "$ROOT")" && pwd) || ROOT="${CLAUDE_PROJECT_DIR:-$PWD}"
+cd "$ROOT" && tsm search -q "<query>" -k 10 -f json --include-content 3
 ```
 
 ## Research Process

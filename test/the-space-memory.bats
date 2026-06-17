@@ -21,3 +21,31 @@ setup() {
   run bash "$SCRIPTS/ingest.sh" <<< '{}'
   [ "$status" -eq 0 ]
 }
+
+# --- resolve-root.sh ---------------------------------------------------------
+
+@test "resolve_root falls back to PWD outside a git repo" {
+  run env -u CLAUDE_PROJECT_DIR bash -c \
+    ". '$SCRIPTS/resolve-root.sh'; cd '$BATS_TEST_TMPDIR' && resolve_root"
+  [ "$status" -eq 0 ]
+  [ "$output" = "$BATS_TEST_TMPDIR" ]
+}
+
+@test "resolve_root uses CLAUDE_PROJECT_DIR outside a git repo" {
+  run bash -c \
+    "CLAUDE_PROJECT_DIR=/var/tmp; . '$SCRIPTS/resolve-root.sh'; cd '$BATS_TEST_TMPDIR' && resolve_root"
+  [ "$status" -eq 0 ]
+  [ "$output" = "/var/tmp" ]
+}
+
+@test "resolve_root returns the main repo top from inside a linked worktree" {
+  main="$BATS_TEST_TMPDIR/main"
+  wt="$BATS_TEST_TMPDIR/wt"
+  git init -q "$main"
+  git -C "$main" -c user.email=t@t -c user.name=t commit -q --allow-empty -m init
+  git -C "$main" worktree add -q "$wt" >/dev/null 2>&1
+  # macOS の /private シンボリックリンク差を吸収するため realpath で正規化して比較する。
+  run bash -c ". '$SCRIPTS/resolve-root.sh'; cd '$wt' && resolve_root"
+  [ "$status" -eq 0 ]
+  [ "$(cd "$output" && pwd -P)" = "$(cd "$main" && pwd -P)" ]
+}
