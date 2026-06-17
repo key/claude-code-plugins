@@ -33,6 +33,15 @@ git の common-dir の親（linked worktree からでも main を指す）→
 - **`Stop`** — そのセッションの JSONL を `tsm ingest-session` で取り込む
   （`ingest.sh`）
 
+## 制約
+
+- linked worktree 内の `*.md` 編集の索引: tsm は `index_root`（`tsm.toml`、
+  通常は main の絶対パス）基準でファイルを読み・格納する。このため main 配下に
+  ネストした worktree の編集はネストパスで索引され main 側の同名 doc とは別
+  エントリになり、main 外の worktree は索引対象外になる。worktree パスの除外は
+  tsm 本体（`index_root` / fs-watcher）側の課題として未対応。
+  なお `doctor` / `search` / `ingest` は worktree からでも main の DB を正しく参照する。
+
 ## スキル / エージェント
 
 - `the-space-memory:search` — 手動でナレッジ検索する（`tsm search`）
@@ -42,7 +51,7 @@ git の common-dir の親（linked worktree からでも main を指す）→
 ## セットアップ
 
 1. `tsm` CLI をインストールして `PATH` を通す
-2. プロジェクトルートに `tsm.toml` を置き `project_root` を設定する
+2. プロジェクトルートに `tsm.toml` を置き `index_root` を設定する
 3. デーモンを起動: `tsm daemon start`（フック経由でも自動起動される）
 4. 動作確認: `tsm doctor -f json` または `/the-space-memory:doctor`
 
