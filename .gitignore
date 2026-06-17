@@ -15,3 +15,7 @@ Thumbs.db
 
 # Env
 .env
+
+# Tool caches / local state
+.rumdl_cache/
+.tsm/
