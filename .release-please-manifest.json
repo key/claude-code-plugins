@@ -1,5 +1,5 @@
 {
-  "plugins/the-space-memory": "0.12.1",
+  "plugins/the-space-memory": "0.12.2",
   "plugins/current-datetime": "0.1.1",
   "plugins/statusline": "0.1.1",
   "plugins/lint-markdown": "0.1.2",
