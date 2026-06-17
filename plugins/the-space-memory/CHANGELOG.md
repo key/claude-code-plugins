@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.1](https://github.com/key/claude-code-plugins/compare/the-space-memory-v0.12.0...the-space-memory-v0.12.1) (2026-06-17)
+
+
+### Bug Fixes
+
+* quote ${CLAUDE_PLUGIN_ROOT} in hook commands ([#17](https://github.com/key/claude-code-plugins/issues/17)) ([c7f47c4](https://github.com/key/claude-code-plugins/commit/c7f47c4ed659338136411ec9a3b4b4753f3cdf97))
+* **the-space-memory:** make hook paths portable and stop logging raw prompts ([#14](https://github.com/key/claude-code-plugins/issues/14)) ([926d59e](https://github.com/key/claude-code-plugins/commit/926d59e72b2b5adf9406b345957a81843faed1ed))
+
 ## [0.12.0](https://github.com/key/claude-code-plugins/compare/the-space-memory-v0.11.0...the-space-memory-v0.12.0) (2026-04-30)
 
 
