@@ -56,4 +56,4 @@ claude --plugin-dir /path/to/claude-code-plugins/plugins/<plugin-name>
 
 ## License
 
-Proprietary. See individual plugins for upstream attribution.
+MIT. See [LICENSE](LICENSE). See individual plugins for upstream attribution.
