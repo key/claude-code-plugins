@@ -12,7 +12,7 @@ context に注入するフックプラグイン。Claude が「今日の日付�
 
 `UserPromptSubmit` のたびに次の形式の 1 行を出力し、context に注入する:
 
-```text
+```xml
 <current_datetime date="2026-06-17" time="08:43:20" day="Wed" tz="JST" />
 ```
 
