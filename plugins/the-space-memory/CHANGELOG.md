@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.2](https://github.com/key/claude-code-plugins/compare/the-space-memory-v0.12.1...the-space-memory-v0.12.2) (2026-06-17)
+
+
+### Bug Fixes
+
+* **the-space-memory:** resolve tsm root from git for worktree support ([#29](https://github.com/key/claude-code-plugins/issues/29)) ([22c4574](https://github.com/key/claude-code-plugins/commit/22c4574f9ca151a2174d2f857e8f260cfed39d37))
+
 ## [0.12.1](https://github.com/key/claude-code-plugins/compare/the-space-memory-v0.12.0...the-space-memory-v0.12.1) (2026-06-17)
 
 
