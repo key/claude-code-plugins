@@ -16,7 +16,10 @@ else
   exit 0
 fi
 
-ROOT="${CLAUDE_PROJECT_DIR:-/workspaces/workspace}"
+# shellcheck source=plugins/the-space-memory/hooks/scripts/resolve-root.sh
+# shellcheck disable=SC1091
+. "$(dirname "$0")/resolve-root.sh"
+ROOT=$(resolve_root)
 cd "$ROOT"
 
 # PROJECT_ROOT（= tsm.toml の project_root）からの相対パスに変換する。

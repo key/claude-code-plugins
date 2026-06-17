@@ -37,7 +37,10 @@ else
   exit 0
 fi
 
-cd "${CLAUDE_PROJECT_DIR:-/workspaces/workspace}"
+# shellcheck source=plugins/the-space-memory/hooks/scripts/resolve-root.sh
+# shellcheck disable=SC1091
+. "$(dirname "$0")/resolve-root.sh"
+cd "$(resolve_root)"
 
 # 検索実行（tsmd が未起動なら自動起動される）
 RESULT=$("$TSM" search --query "$QUERY" --format json 2>>"$LOG") || {

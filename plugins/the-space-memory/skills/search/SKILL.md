@@ -15,7 +15,9 @@ Search the knowledge base using `tsm search`.
 ## Usage
 
 ```bash
-cd "$CLAUDE_PROJECT_DIR" && tsm search -q "$ARGUMENTS" -k 5 -f json --include-content 3
+# main リポジトリのトップに移動してから実行する（worktree からでも main を指す）。
+ROOT=$(git rev-parse --git-common-dir 2>/dev/null) && ROOT=$(cd "$(dirname "$ROOT")" && pwd) || ROOT="${CLAUDE_PROJECT_DIR:-$PWD}"
+cd "$ROOT" && tsm search -q "$ARGUMENTS" -k 5 -f json --include-content 3
 ```
 
 ## Options

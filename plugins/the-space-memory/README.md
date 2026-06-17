@@ -21,9 +21,10 @@
 
 ## 挙動
 
-3 つのフックで動く。いずれも `CLAUDE_PROJECT_DIR` をプロジェクトルート
-（= `tsm.toml` の `project_root`）として扱い、プロジェクト外のパスや
-空クエリはスキップする。
+3 つのフックで動く。いずれもプロジェクトルート（= `tsm.toml` の
+`project_root`）を `resolve-root.sh` で解決する。解決順は
+git の common-dir の親（linked worktree からでも main を指す）→
+`CLAUDE_PROJECT_DIR` → `$PWD`。プロジェクト外のパスや空クエリはスキップする。
 
 - **`UserPromptSubmit`** — クエリで `tsm search` し、ヒットを
   `<knowledge_search>` として context に注入（`search.sh`）
@@ -63,5 +64,5 @@
 | 症状 | 対処 |
 |---|---|
 | 検索が空振りする | `tsm doctor` で確認し `tsm backfill` で再生成 |
-| 索引されない | `CLAUDE_PROJECT_DIR` がルートを指すか確認 |
+| 索引されない | `resolve-root.sh` が想定のルートを返すか確認（git 管理下なら main を指す） |
 | デーモンが落ちている | `tsm daemon start` |

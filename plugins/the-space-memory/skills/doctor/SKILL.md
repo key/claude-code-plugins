@@ -11,7 +11,9 @@ Run `tsm doctor` to check daemon, embedder, database, and vector integrity.
 ## Usage
 
 ```bash
-cd "$CLAUDE_PROJECT_DIR" && tsm doctor -f json
+# main リポジトリのトップに移動してから実行する（worktree からでも main を指す）。
+ROOT=$(git rev-parse --git-common-dir 2>/dev/null) && ROOT=$(cd "$(dirname "$ROOT")" && pwd) || ROOT="${CLAUDE_PROJECT_DIR:-$PWD}"
+cd "$ROOT" && tsm doctor -f json
 ```
 
 ## What it checks
