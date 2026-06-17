@@ -1,11 +1,11 @@
 {
-  "plugins/the-space-memory": "0.12.0",
+  "plugins/the-space-memory": "0.12.1",
   "plugins/current-datetime": "0.1.1",
   "plugins/statusline": "0.1.1",
   "plugins/lint-markdown": "0.1.1",
-  "plugins/lint-shell": "0.1.1",
+  "plugins/lint-shell": "0.1.2",
   "plugins/lint-yaml": "0.1.1",
-  "plugins/lint-python": "0.1.1",
+  "plugins/lint-python": "0.1.2",
   "plugins/lint-toml": "0.1.2",
-  "plugins/secret-scan": "0.1.1"
+  "plugins/secret-scan": "0.1.2"
 }
