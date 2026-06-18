@@ -38,7 +38,7 @@
     },
     {
       "name": "lint-yaml",
-      "description": "Lint YAML files with yamllint on edit (PostToolUse)",
+      "description": "Lint YAML files with ryl or yamllint on edit (PostToolUse)",
       "category": "linter",
       "source": "./plugins/lint-yaml"
     },
