@@ -1,7 +1,7 @@
 {
   "name": "lint-yaml",
   "description": "Lint YAML files with ryl or yamllint on edit (PostToolUse)",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "Mitsukuni Sato"
   },
