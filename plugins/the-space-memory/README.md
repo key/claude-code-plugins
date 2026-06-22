@@ -22,7 +22,7 @@
 ## 挙動
 
 3 つのフックで動く。いずれもプロジェクトルート（= `tsm.toml` の
-`project_root`）を `resolve-root.sh` で解決する。解決順は
+`index_root`）を `resolve-root.sh` で解決する。解決順は
 git の common-dir の親（linked worktree からでも main を指す）→
 `CLAUDE_PROJECT_DIR` → `$PWD`。プロジェクト外のパスや空クエリはスキップする。
 
@@ -46,6 +46,8 @@ git の common-dir の親（linked worktree からでも main を指す）→
 
 - `the-space-memory:search` — 手動でナレッジ検索する（`tsm search`）
 - `the-space-memory:doctor` — デーモン・埋め込み器・DB の健全性チェック
+- `the-space-memory:dict-update` — `tsm` ユーザー辞書のキュレーション（`tsm dict update` 候補の
+  ADD/REJECT 判定・reject 同期・synonym 同期。`--apply` 前に承認）
 - `deep-research` エージェント — 複数クエリ + 全文読みで深掘り調査する
 
 ## セットアップ
