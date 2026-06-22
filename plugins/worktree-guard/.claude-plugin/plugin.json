@@ -1,0 +1,42 @@
+{
+  "name": "worktree-guard",
+  "description": "Guard against common git-worktree mistakes before they happen: committing in the shared primary checkout, bulk staging unrelated changes, and creating worktrees from the current HEAD instead of an explicit base (PreToolUse Bash hook).",
+  "version": "0.1.0",
+  "author": {
+    "name": "Mitsukuni Sato"
+  },
+  "repository": "https://github.com/key/claude-code-plugins",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "worktree",
+    "hook",
+    "safety"
+  ],
+  "userConfig": {
+    "block_primary_commit": {
+      "type": "string",
+      "title": "Block commits in the primary checkout",
+      "description": "linked worktree を持つ repo の primary checkout での git commit をブロックする（true/false）。既定 true",
+      "default": "true"
+    },
+    "block_bulk_add": {
+      "type": "string",
+      "title": "Block bulk staging",
+      "description": "linked worktree を持つ repo で git add -A / add . / commit -a をブロックし、明示 stage を促す（true/false）。既定 true",
+      "default": "true"
+    },
+    "require_worktree_base": {
+      "type": "string",
+      "title": "Require explicit base for git worktree add",
+      "description": "ベース ref 無しの git worktree add（現在 HEAD 派生）をブロックする（true/false）。既定 true",
+      "default": "true"
+    },
+    "fail_mode": {
+      "type": "string",
+      "title": "Behavior when git/jq is missing",
+      "description": "依存（git または jq）が無く判定できないとき: open=許可（誤検知回避優先）/ closed=ブロック。既定 open",
+      "default": "open"
+    }
+  }
+}
