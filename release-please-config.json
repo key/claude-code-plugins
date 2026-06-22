@@ -4,7 +4,7 @@
   "include-component-in-tag": true,
   "separate-pull-requests": true,
   "bump-minor-pre-major": true,
-  "bump-patch-for-minor-pre-major": true,
+  "bump-patch-for-minor-pre-major": false,
   "packages": {
     "plugins/the-space-memory": {
       "package-name": "the-space-memory",

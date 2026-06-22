@@ -46,9 +46,8 @@ GPL/LGPL/AGPL/MPL は不可。
 - **Conventional Commits** で書く
   - 例: `feat(the-space-memory): ...`, `fix(the-space-memory): ...`
   - scope はプラグイン名（=ディレクトリ名）にする
-  - `feat:` → minor、`fix:`/`perf:` → patch
-  - `!` または `BREAKING CHANGE:` → major
-  - 1.0.0 未満では `feat:` も patch 扱い（`bump-minor-pre-major` 設定）
+  - `feat:` → minor、`fix:`/`perf:` → patch（1.0.0 未満でも `feat:` は minor）
+  - `!` または `BREAKING CHANGE:` → major（1.0.0 未満では minor 止まり。`bump-minor-pre-major` 設定）
 - main にマージすると release-please がプラグインごとに **Release PR** を自動生成
   - 該当の `plugins/<name>/.claude-plugin/plugin.json` の `version` 更新
   - `plugins/<name>/CHANGELOG.md` の自動生成
