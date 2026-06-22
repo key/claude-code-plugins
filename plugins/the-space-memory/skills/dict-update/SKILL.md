@@ -54,6 +54,12 @@ by adjusting `--threshold` and the reject list. Therefore:
    tsm dict reject --apply
    ```
 
+   `reject --apply` is **additive and case-insensitive**: it adds the
+   file's words to the DB reject list (rejecting `the` also catches
+   `The`). It does **not** prune — an empty file is a no-op, and removing
+   a word from the file does not un-reject it. There is no CLI un-reject;
+   clearing the list requires `tsm rebuild`.
+
 4. **Re-run the dry run** and confirm only the ADD words remain:
 
    ```bash
@@ -115,7 +121,7 @@ Proceed?
 | `tsm dict update` | Dry run — list candidates (read-only) |
 | `tsm dict update --threshold <N>` | Dry run at a different frequency cutoff (default 5) |
 | `tsm dict update --apply` | Add all current candidates + rebuild FTS — **confirm first** |
-| `tsm dict reject --apply` | Sync `.tsm/reject_words.txt` to the DB |
+| `tsm dict reject --apply` | Add `.tsm/reject_words.txt` words to the DB reject list (additive, case-insensitive; empty file = no-op; no un-reject) |
 | `tsm dict reject --all` | Show all currently rejected words |
 | `tsm dict synonym sync` | Sync `.tsm/synonyms.csv` to the DB |
 
