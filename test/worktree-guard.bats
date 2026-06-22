@@ -18,6 +18,14 @@ setup() {
   SOLO="$TMP/solo"
   git init -q "$SOLO"
   git -C "$SOLO" -c user.email=t@t -c user.name=t commit -q --allow-empty -m init
+
+  # worktree を使う repo を、パスに "worktrees" を含む場所へ置く。
+  # primary の git-dir = .../worktrees/proj/.git（/.git/worktrees/ は含まない）。
+  mkdir -p "$TMP/worktrees"
+  WTP="$TMP/worktrees/proj"
+  git init -q "$WTP"
+  git -C "$WTP" -c user.email=t@t -c user.name=t commit -q --allow-empty -m init
+  git -C "$WTP" worktree add -q "$TMP/worktrees/proj-wt" -b feat2
 }
 
 teardown() {
@@ -72,6 +80,21 @@ ev() {
   [ "$status" -eq 0 ]
 }
 
+@test "rule2: blocks git commit --all (long form)" {
+  run bash "$GUARD" <<< "$(ev 'git commit --all -m wip' "$WT")"
+  [ "$status" -eq 2 ]
+}
+
+@test "rule2: does NOT block -a/--all appearing inside the commit message" {
+  run bash "$GUARD" <<< "$(ev 'git commit -m "rename -a to --all"' "$WT")"
+  [ "$status" -eq 0 ]
+}
+
+@test "rule2: does not block when -a follows the -m message (best-effort)" {
+  run bash "$GUARD" <<< "$(ev 'git commit -m msg -a' "$WT")"
+  [ "$status" -eq 0 ]
+}
+
 # ── Rule 3: worktree add base ─────────────────────────────────────────────
 @test "rule3: blocks git worktree add without a base" {
   run bash "$GUARD" <<< "$(ev "git worktree add $TMP/new" "$MAIN")"
@@ -91,6 +114,17 @@ ev() {
 @test "rule3: allows git worktree add -b with an explicit base" {
   run bash "$GUARD" <<< "$(ev "git worktree add -b topic $TMP/new origin/main" "$MAIN")"
   [ "$status" -eq 0 ]
+}
+
+@test "rule3: allows git worktree add --orphan (no base applies)" {
+  run bash "$GUARD" <<< "$(ev "git worktree add --orphan -b fresh $TMP/new" "$MAIN")"
+  [ "$status" -eq 0 ]
+}
+
+# ── primary detection is anchored on the .git structure, not the repo path ──
+@test "rule1: blocks primary commit when the repo path contains 'worktrees'" {
+  run bash "$GUARD" <<< "$(ev 'git commit -m x' "$WTP")"
+  [ "$status" -eq 2 ]
 }
 
 # ── Target resolution ─────────────────────────────────────────────────────

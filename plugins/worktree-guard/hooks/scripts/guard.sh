@@ -64,10 +64,11 @@ if [[ "$CMD" =~ ^[[:space:]]*cd[[:space:]]+([^[:space:]]+)[[:space:]]*\&\&[[:spa
   rest="${BASH_REMATCH[2]}"
 fi
 
-# Only inspect the first command in a chain. Flags relevant to our rules
-# (-a / -A / the worktree base) always precede any quoted commit message, so
-# truncating at the first &&/;/| never hides a violation — it only avoids
-# misattributing later commands.
+# Only inspect the first command in a chain. Truncate at the first &&/;/| to
+# avoid misattributing a later chained command. This is glob truncation, not a
+# shell parser, so a &&/;/| inside a quoted commit message also truncates — that
+# only ever drops a detection (an allow), never causes a spurious block, which
+# is acceptable for a best-effort guard.
 seg="$rest"
 seg="${seg%%&&*}"
 seg="${seg%%;*}"
@@ -105,6 +106,7 @@ if [[ "$SUB" == "worktree" && "${TOK[i+1]:-}" == "add" ]]; then
   while (( j < n )); do
     a="${TOK[j]}"
     case "$a" in
+      --orphan) allow ;;  # creates a new orphan branch; no base ref applies
       -b | -B | --reason) j=$((j + 2)) ;;
       -*) j=$((j + 1)) ;;
       *) positional=$((positional + 1)); j=$((j + 1)) ;;
@@ -128,9 +130,11 @@ worktree_count=$(git -C "$target" worktree list --porcelain 2>/dev/null | grep -
 (( worktree_count >= 2 )) || allow
 
 # A linked worktree's git dir is `<repo>/.git/worktrees/<name>`; the primary
-# checkout's is just `<repo>/.git`. This avoids fragile path normalization.
+# checkout's is `<repo>/.git`. Anchor on `/.git/worktrees/` (the structure git
+# itself creates) so a repo merely *located* under a path containing the word
+# "worktrees" is not misclassified as a linked worktree.
 is_primary=true
-case "$git_dir" in */worktrees/*) is_primary=false ;; esac
+case "$git_dir" in */.git/worktrees/*) is_primary=false ;; esac
 
 # ── Rule 1: no commits in the primary checkout when worktrees are in use ───
 if [[ "$SUB" == "commit" && "$OPT_PRIMARY_COMMIT" == "true" && "$is_primary" == "true" ]]; then
@@ -152,13 +156,25 @@ if [[ "$OPT_BULK_ADD" == "true" ]]; then
       j=$((j + 1))
     done
   elif [[ "$SUB" == "commit" ]]; then
+    # Scan only the leading option cluster. A value-carrying short flag
+    # (-m/-F/-C/-c/-t/-S) leads a token whose remainder is its inline value, and
+    # the first positional ends the options — stop there so an `-a`/`--all`
+    # appearing inside the commit message text cannot trigger a false positive.
     j=$((i + 1))
     while (( j < n )); do
       a="${TOK[j]}"
-      if [[ "$a" == "--all" || ( "$a" == -* && "$a" != --* && "$a" == *a* ) ]]; then
-        block "git commit ${a} stages all tracked changes and can include unrelated edits." \
-          "Stage specific paths first, then \`git commit\` without -a."
-      fi
+      case "$a" in
+        --all)
+          block "git commit --all stages all tracked changes and can include unrelated edits." \
+            "Stage specific paths first, then \`git commit\` without --all." ;;
+        --*) ;;                # other long flags: never -a
+        -[mFCctS]*) break ;;   # value-carrying short flag: remainder is its value
+        -*a*)
+          block "git commit ${a} stages all tracked changes and can include unrelated edits." \
+            "Stage specific paths first, then \`git commit\` without -a." ;;
+        -*) ;;                 # other short-flag cluster without -a
+        *) break ;;            # first positional ends the option cluster
+      esac
       j=$((j + 1))
     done
   fi

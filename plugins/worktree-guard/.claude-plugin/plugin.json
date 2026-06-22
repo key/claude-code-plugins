@@ -15,22 +15,22 @@
   ],
   "userConfig": {
     "block_primary_commit": {
-      "type": "string",
+      "type": "boolean",
       "title": "Block commits in the primary checkout",
-      "description": "linked worktree を持つ repo の primary checkout での git commit をブロックする（true/false）。既定 true",
-      "default": "true"
+      "description": "linked worktree を持つ repo の primary checkout での git commit をブロックする。既定 true",
+      "default": true
     },
     "block_bulk_add": {
-      "type": "string",
+      "type": "boolean",
       "title": "Block bulk staging",
-      "description": "linked worktree を持つ repo で git add -A / add . / commit -a をブロックし、明示 stage を促す（true/false）。既定 true",
-      "default": "true"
+      "description": "linked worktree を持つ repo で git add -A / add . / commit -a をブロックし、明示 stage を促す。既定 true",
+      "default": true
     },
     "require_worktree_base": {
-      "type": "string",
+      "type": "boolean",
       "title": "Require explicit base for git worktree add",
-      "description": "ベース ref 無しの git worktree add（現在 HEAD 派生）をブロックする（true/false）。既定 true",
-      "default": "true"
+      "description": "ベース ref 無しの git worktree add（現在 HEAD 派生）をブロックする。既定 true",
+      "default": true
     },
     "fail_mode": {
       "type": "string",
