@@ -59,6 +59,12 @@
       "description": "Block secrets before they reach the LLM: scan prompts/files with gitleaks and Bash commands with risky patterns",
       "category": "security",
       "source": "./plugins/secret-scan"
+    },
+    {
+      "name": "worktree-guard",
+      "description": "Guard against common git-worktree mistakes: committing in the primary checkout, bulk staging, and worktree creation without an explicit base (PreToolUse)",
+      "category": "security",
+      "source": "./plugins/worktree-guard"
     }
   ]
 }
