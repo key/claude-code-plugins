@@ -1,18 +1,28 @@
 #!/usr/bin/env bash
 set -eu
 
-LOG="/tmp/tsm-hook-search.log"
+# デバッグログはデフォルト無効。TSM_HOOK_DEBUG をセットしたときだけ、
+# ユーザー専用のテンポラリ（0600）に出力する。
+# 生のプロンプトを含むため、共有 /tmp への常時書き込みはしない。
+if [ -n "${TSM_HOOK_DEBUG:-}" ]; then
+  LOG="${TMPDIR:-/tmp}/tsm-hook-search.$(id -u).log"
+  ( umask 077; : >> "$LOG" )
+  log() { echo "[$(date -Iseconds)] $*" >> "$LOG"; }
+else
+  LOG="/dev/null"
+  log() { :; }
+fi
 
 # stdin から JSON を読む
 INPUT=$(cat)
-echo "[$(date -Iseconds)] RAW_INPUT='${INPUT:0:300}'" >> "$LOG"
+log "RAW_INPUT='${INPUT:0:300}'"
 QUERY=$(echo "$INPUT" | jq -r '.prompt // .user_prompt // empty' 2>/dev/null || true)
 
-echo "[$(date -Iseconds)] query='${QUERY:0:80}' PLUGIN_ROOT='${CLAUDE_PLUGIN_ROOT:-}' PROJECT_DIR='${CLAUDE_PROJECT_DIR:-}'" >> "$LOG"
+log "query='${QUERY:0:80}' PLUGIN_ROOT='${CLAUDE_PLUGIN_ROOT:-}' PROJECT_DIR='${CLAUDE_PROJECT_DIR:-}'"
 
 # クエリが短すぎる場合はスキップ
 if [ ${#QUERY} -lt 3 ]; then
-  echo "[$(date -Iseconds)] SKIP: query too short (${#QUERY} chars)" >> "$LOG"
+  log "SKIP: query too short (${#QUERY} chars)"
   exit 0
 fi
 
@@ -23,27 +33,30 @@ if command -v tsm >/dev/null 2>&1; then
 elif [ -x "${CLAUDE_PLUGIN_ROOT:-}/bin/tsm" ]; then
   TSM="${CLAUDE_PLUGIN_ROOT:-}/bin/tsm"
 else
-  echo "[$(date -Iseconds)] SKIP: tsm not found" >> "$LOG"
+  log "SKIP: tsm not found"
   exit 0
 fi
 
-cd "${CLAUDE_PROJECT_DIR:-/workspaces/workspace}"
+# shellcheck source=plugins/the-space-memory/hooks/scripts/resolve-root.sh
+# shellcheck disable=SC1091
+. "$(dirname "$0")/resolve-root.sh"
+cd "$(resolve_root)"
 
 # 検索実行（tsmd が未起動なら自動起動される）
 RESULT=$("$TSM" search --query "$QUERY" --format json 2>>"$LOG") || {
-  echo "[$(date -Iseconds)] FAIL: tsm search exited with $?" >> "$LOG"
+  log "FAIL: tsm search exited with $?"
   exit 0
 }
 
 # 結果が空なら何も出力しない
 if [ -z "$RESULT" ] || [ "$RESULT" = "null" ]; then
-  echo "[$(date -Iseconds)] EMPTY: no results" >> "$LOG"
+  log "EMPTY: no results"
   exit 0
 fi
 
 COUNT=$(echo "$RESULT" | jq '.results | length' 2>/dev/null || echo "0")
 TOTAL_HITS=$(echo "$RESULT" | jq '.total_hits // 0' 2>/dev/null || echo "0")
-echo "[$(date -Iseconds)] OK: $COUNT results (total_hits: $TOTAL_HITS)" >> "$LOG"
+log "OK: $COUNT results (total_hits: $TOTAL_HITS)"
 
 if [ "$COUNT" = "0" ]; then
   exit 0
@@ -51,8 +64,7 @@ fi
 
 BUDGET="${TSM_SNIPPET_BUDGET:-1000}"
 
-# Build XML output following Anthropic prompting best practices
-# See: docs/claude-code/claude-code-prompt-format.md
+# Build XML output following Anthropic prompting best practices.
 XML=$(echo "$RESULT" | jq -r --arg query "$QUERY" --argjson budget "$BUDGET" --argjson total_hits "$TOTAL_HITS" '
   .results | length as $count |
   reduce to_entries[] as $entry (

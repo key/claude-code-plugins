@@ -35,7 +35,8 @@ plugins/
 
 ## ライセンス
 
-Proprietary。依存ライセンスは MIT, BSD, ISC, Apache-2.0, Unlicense のみ許可。
+MIT（ルートの `LICENSE` 参照）。各 `plugin.json` の `license` も MIT で統一する。
+依存ライセンスは MIT, BSD, ISC, Apache-2.0, Unlicense のみ許可。
 GPL/LGPL/AGPL/MPL は不可。
 
 ## バージョニング & リリース
@@ -69,10 +70,22 @@ GPL/LGPL/AGPL/MPL は不可。
 - 本文（body）は英語（Claude の指示理解精度が高いため）
 - スキルはエージェントのフロントエンド（ヒアリング・要件整理・委譲）、エージェントはバックエンド（実行）
 
+## 開発時の注意（フック・CI）
+
+- **編集が PostToolUse フックでブロックされる**: `*.md` 編集時に rumdl が走り、lint 失敗で `exit 2`。
+  行は ≤120 文字（`.rumdl.toml` は `line_length=120`、`docs/superpowers/**`・`**/CHANGELOG.md` 除外）。
+- **secret-scan が Bash/プロンプトをブロックする**: `cat .env`・`~/.ssh/`・同一行の `less`+`.env` 等の
+  risky パターンに反応。テストデータや PR 本文に risky 文字列を直書きせず、変数組み立てや `--body-file` を使う。
+- **ステージは明示パスで**: `git add -A` は未追跡の `.tsm/`（ナレッジ DB 等）を巻き込むので使わない。
+- **フックのローカルテスト**: `echo '{"tool_input":{"file_path":"x.md"}}' | bash <script>` で stdin に JSON を渡す。
+- **CI**（`.github/workflows/ci.yml`）= jq(JSON 検証) + shellcheck + rumdl + `bats test`。`gh pr checks <n>` で確認。
+- **PR タイトルは Conventional Commit type 必須**（`pr-title.yml` が強制）。PR は squash マージ。
+- **GitHub Actions は commit SHA でピン**（`# vX.Y.Z` コメント併記）。
+
 ## ローカルテスト
 
 ```bash
-claude --plugin-dir /workspaces/claude-code-plugins/plugins/the-space-memory
+claude --plugin-dir <repo>/plugins/the-space-memory
 ```
 
 または、マーケットプレイスとして読み込む:
