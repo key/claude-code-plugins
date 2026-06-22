@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.0](https://github.com/key/claude-code-plugins/compare/the-space-memory-v0.12.2...the-space-memory-v0.13.0) (2026-06-22)
+
+
+### Features
+
+* **the-space-memory:** add dict-update skill for dictionary curation ([#34](https://github.com/key/claude-code-plugins/issues/34)) ([924ef08](https://github.com/key/claude-code-plugins/commit/924ef08e59086aac01f9e1f46e0aa2d1c8f44979))
+
 ## [0.12.2](https://github.com/key/claude-code-plugins/compare/the-space-memory-v0.12.1...the-space-memory-v0.12.2) (2026-06-17)
 
 
