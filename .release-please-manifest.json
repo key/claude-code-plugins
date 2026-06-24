@@ -1,6 +1,6 @@
 {
   "plugins/current-datetime": "0.1.1",
-  "plugins/statusline": "0.1.1",
+  "plugins/statusline": "0.2.0",
   "plugins/lint-markdown": "0.1.2",
   "plugins/lint-shell": "0.1.2",
   "plugins/lint-yaml": "0.1.3",
