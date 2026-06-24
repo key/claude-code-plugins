@@ -6,7 +6,6 @@ key's personal Claude Code plugin marketplace.
 
 | Name | Description |
 |---|---|
-| [`the-space-memory`](plugins/the-space-memory) | Cross-workspace knowledge search engine with hybrid FTS5 + vector search. Requires the `tsm` CLI to be installed separately. |
 | [`current-datetime`](plugins/current-datetime) | Inject current datetime (system TZ) into UserPromptSubmit context. |
 | [`statusline`](plugins/statusline) | Two-line Claude Code statusline (env, host, branch, model, context %, rate-limit). |
 | [`lint-markdown`](plugins/lint-markdown) | Auto-format and lint Markdown files with rumdl on edit (PostToolUse). Requires `rumdl`. |
@@ -32,7 +31,7 @@ In Claude Code, run:
 Then install a plugin (repeat per plugin you want):
 
 ```text
-/plugin install the-space-memory@key-claude-code-plugins
+/plugin install current-datetime@key-claude-code-plugins
 ```
 
 Or browse and toggle plugins interactively:

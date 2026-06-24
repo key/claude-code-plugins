@@ -7,12 +7,6 @@
   },
   "plugins": [
     {
-      "name": "the-space-memory",
-      "description": "Cross-workspace knowledge search engine with hybrid FTS5 + vector search",
-      "category": "productivity",
-      "source": "./plugins/the-space-memory"
-    },
-    {
       "name": "current-datetime",
       "description": "Inject current datetime into UserPromptSubmit context",
       "category": "productivity",
