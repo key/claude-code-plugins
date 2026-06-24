@@ -23,7 +23,6 @@ plugins/
 
 | 名前 | 概要 |
 |---|---|
-| `the-space-memory` | クロスワークスペースのナレッジ検索（FTS5 + ベクトル）。`tsm` バイナリは別途インストールが必要 |
 | `current-datetime` | UserPromptSubmit 時に現在時刻（システム TZ）を context として注入する |
 | `statusline` | env / host / branch / model / context % / rate-limit を 2 行で表示するステータスライン |
 | `lint-markdown` | `*.md` を編集時に rumdl で自動整形 + lint（PostToolUse）。rumdl が必要 |
@@ -32,15 +31,6 @@ plugins/
 | `lint-python` | `*.py` を編集時に ruff で自動整形 + lint（PostToolUse）。ruff が必要 |
 | `lint-toml` | `*.toml` を編集時に taplo で自動整形 + lint（PostToolUse）。taplo が必要 |
 | `secret-scan` | gitleaks でプロンプト/ファイルをスキャンし機密漏洩をブロック。gitleaks が必要 |
-
-### `the-space-memory` のスキル / エージェント
-
-| 種別 | 名前 | 概要 |
-|---|---|---|
-| skill | `search` | ナレッジベースをハイブリッド検索（FTS5 + ベクトル）。`/the-space-memory:search` |
-| skill | `doctor` | デーモン / エンベッダ / DB のヘルスチェック。`/the-space-memory:doctor` |
-| skill | `dict-update` | `tsm` ユーザー辞書のキュレーション。`tsm dict update` 候補を ADD/REJECT 判定し、reject 同期・synonym 同期まで支援。`--apply`（FTS 再構築）前に承認を取る。`/the-space-memory:dict-update` |
-| agent | `deep-research` | 複数クエリ・全文読解で横断的に深掘りするリサーチエージェント |
 
 ## ライセンス
 
@@ -53,7 +43,7 @@ GPL/LGPL/AGPL/MPL は不可。
 リリースは [release-please](https://github.com/googleapis/release-please-action) で自動化されている。
 
 - **Conventional Commits** で書く
-  - 例: `feat(the-space-memory): ...`, `fix(the-space-memory): ...`
+  - 例: `feat(statusline): ...`, `fix(lint-markdown): ...`
   - scope はプラグイン名（=ディレクトリ名）にする
   - `feat:` → minor、`fix:`/`perf:` → patch（1.0.0 未満でも `feat:` は minor）
   - `!` または `BREAKING CHANGE:` → major（1.0.0 未満では minor 止まり。`bump-minor-pre-major` 設定）
@@ -62,7 +52,7 @@ GPL/LGPL/AGPL/MPL は不可。
   - `plugins/<name>/CHANGELOG.md` の自動生成
   - `.release-please-manifest.json` の更新
 - Release PR をマージすると **GitHub Release** と tag が自動作成される
-  - tag 形式: `<plugin-name>-v<version>` （例: `the-space-memory-v0.12.0`）
+  - tag 形式: `<plugin-name>-v<version>` （例: `statusline-v0.1.1`）
 
 新しいプラグインを追加するときは:
 
@@ -93,7 +83,7 @@ GPL/LGPL/AGPL/MPL は不可。
 ## ローカルテスト
 
 ```bash
-claude --plugin-dir <repo>/plugins/the-space-memory
+claude --plugin-dir <repo>/plugins/<plugin-name>
 ```
 
 または、マーケットプレイスとして読み込む:

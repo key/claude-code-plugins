@@ -6,16 +6,6 @@
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": false,
   "packages": {
-    "plugins/the-space-memory": {
-      "package-name": "the-space-memory",
-      "extra-files": [
-        {
-          "type": "json",
-          "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
-        }
-      ]
-    },
     "plugins/current-datetime": {
       "package-name": "current-datetime",
       "extra-files": [
