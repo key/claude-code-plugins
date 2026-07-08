@@ -49,6 +49,12 @@
       "source": "./plugins/lint-toml"
     },
     {
+      "name": "lint-c",
+      "description": "Auto-format C/C++ sources with clang-format on edit (PostToolUse)",
+      "category": "linter",
+      "source": "./plugins/lint-c"
+    },
+    {
       "name": "secret-scan",
       "description": "Block secrets before they reach the LLM: scan prompts/files with gitleaks and Bash commands with risky patterns",
       "category": "security",

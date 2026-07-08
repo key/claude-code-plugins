@@ -13,6 +13,7 @@ key's personal Claude Code plugin marketplace.
 | [`lint-yaml`](plugins/lint-yaml) | Lint YAML files with yamllint on edit (PostToolUse). Requires `yamllint`. |
 | [`lint-python`](plugins/lint-python) | Auto-format and lint Python files with ruff on edit (PostToolUse). Requires `ruff`. |
 | [`lint-toml`](plugins/lint-toml) | Auto-format and lint TOML files with taplo on edit (PostToolUse). Requires `taplo`. |
+| [`lint-c`](plugins/lint-c) | Auto-format C/C++ sources with clang-format on edit (PostToolUse). Requires `clang-format` (18+ for `.clang-format-ignore`). Skips projects without a `.clang-format`. |
 | [`secret-scan`](plugins/secret-scan) | Block secrets before they reach the LLM: scan prompts/files with gitleaks and Bash commands for risky patterns. Requires `gitleaks`. |
 | [`worktree-guard`](plugins/worktree-guard) | Block common git-worktree mistakes (committing in the primary checkout, bulk staging, baseless worktree creation) before they run (PreToolUse). Requires `git` and `jq`. |
 

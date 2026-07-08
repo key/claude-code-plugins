@@ -8,7 +8,7 @@ setup() {
 }
 
 @test "lint scripts skip unrelated extensions without output" {
-  for p in lint-markdown lint-python lint-shell lint-yaml lint-toml; do
+  for p in lint-markdown lint-python lint-shell lint-yaml lint-toml lint-c; do
     run bash "$REPO_ROOT/plugins/$p/hooks/scripts/lint.sh" <<< '{"tool_input":{"file_path":"/tmp/foo.bin"}}'
     [ "$status" -eq 0 ]
     [ -z "$output" ]
@@ -23,4 +23,14 @@ setup() {
 @test "lint-markdown skips a .md file when CLAUDE_PROJECT_DIR is unset" {
   run env -u CLAUDE_PROJECT_DIR bash "$REPO_ROOT/plugins/lint-markdown/hooks/scripts/lint.sh" <<< '{"tool_input":{"file_path":"/tmp/x.md"}}'
   [ "$status" -eq 0 ]
+}
+
+@test "lint-c skips a .c file when the project has no .clang-format" {
+  tmp="$BATS_TEST_TMPDIR/proj"
+  mkdir -p "$tmp"
+  echo 'int main(void){return 0;}' > "$tmp/x.c"
+  run env CLAUDE_PROJECT_DIR="$tmp" bash "$REPO_ROOT/plugins/lint-c/hooks/scripts/lint.sh" \
+    <<< "{\"tool_input\":{\"file_path\":\"$tmp/x.c\"}}"
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
 }
