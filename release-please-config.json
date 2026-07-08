@@ -76,6 +76,16 @@
         }
       ]
     },
+    "plugins/lint-c": {
+      "package-name": "lint-c",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
     "plugins/secret-scan": {
       "package-name": "secret-scan",
       "extra-files": [
@@ -88,16 +98,6 @@
     },
     "plugins/worktree-guard": {
       "package-name": "worktree-guard",
-      "extra-files": [
-        {
-          "type": "json",
-          "path": ".claude-plugin/plugin.json",
-          "jsonpath": "$.version"
-        }
-      ]
-    },
-    "plugins/lint-c": {
-      "package-name": "lint-c",
       "extra-files": [
         {
           "type": "json",
