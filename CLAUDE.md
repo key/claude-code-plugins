@@ -89,5 +89,5 @@ claude --plugin-dir <repo>/plugins/<plugin-name>
 または、マーケットプレイスとして読み込む:
 
 ```bash
-claude  # /plugin で claude-code-plugins を追加
+claude  # /plugin で key-plugin-cc を追加
 ```

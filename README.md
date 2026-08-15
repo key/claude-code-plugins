@@ -1,4 +1,4 @@
-# claude-code-plugins
+# key-plugin-cc
 
 key's personal Claude Code plugin marketplace.
 
@@ -26,13 +26,13 @@ and lets Claude Code pull the latest releases automatically.
 In Claude Code, run:
 
 ```text
-/plugin marketplace add https://github.com/key/claude-code-plugins.git
+/plugin marketplace add https://github.com/key/key-plugin-cc.git
 ```
 
 Then install a plugin (repeat per plugin you want):
 
 ```text
-/plugin install current-datetime@key-claude-code-plugins
+/plugin install current-datetime@key-plugin-cc
 ```
 
 Or browse and toggle plugins interactively:
@@ -44,7 +44,7 @@ Or browse and toggle plugins interactively:
 To pull updates later:
 
 ```text
-/plugin marketplace update key-claude-code-plugins
+/plugin marketplace update key-plugin-cc
 ```
 
 ### Local development
@@ -52,7 +52,7 @@ To pull updates later:
 To load a single plugin straight from a local checkout:
 
 ```bash
-claude --plugin-dir /path/to/claude-code-plugins/plugins/<plugin-name>
+claude --plugin-dir /path/to/key-plugin-cc/plugins/<plugin-name>
 ```
 
 ## License

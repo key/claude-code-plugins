@@ -5,7 +5,7 @@
   "author": {
     "name": "Mitsukuni Sato"
   },
-  "repository": "https://github.com/key/claude-code-plugins",
+  "repository": "https://github.com/key/key-plugin-cc",
   "license": "MIT",
   "keywords": [
     "git",
