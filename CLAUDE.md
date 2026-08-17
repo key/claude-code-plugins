@@ -33,6 +33,7 @@ plugins/
 | `lint-c` | `*.c`/`*.h`/`*.cpp` 等を編集時に clang-format で自動整形（PostToolUse）。clang-format と `.clang-format` が必要 |
 | `secret-scan` | gitleaks でプロンプト/ファイルをスキャンし機密漏洩をブロック。gitleaks が必要 |
 | `worktree-guard` | 主チェックアウトでのコミット・一括ステージ・base 無しの worktree 作成をブロック（PreToolUse）。git と jq が必要 |
+| `madr-toolkit` | ADR の作成スキル（定型レイアウト + 記載ルール）とコンテキスト無しレビューエージェント |
 
 ## ライセンス
 

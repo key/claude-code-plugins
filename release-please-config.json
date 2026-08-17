@@ -105,6 +105,16 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "plugins/madr-toolkit": {
+      "package-name": "madr-toolkit",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }
