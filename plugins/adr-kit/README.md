@@ -6,7 +6,7 @@ ADR（Architecture Decision Record）の作成・改訂・supersede と、コン
 
 | 種類 | 名前 | 役割 |
 |---|---|---|
-| スキル | `adr` | 定型レイアウト・記載ルールに従って ADR を作成・改訂・supersede する |
+| スキル | `manage-adr` | 定型レイアウト・記載ルールに従って ADR を作成・改訂・supersede する |
 | エージェント | `adr-reviewer` | 完成した ADR をコンテキスト無しでレビューする（レイアウト・frontmatter・記載ルール違反を severity + 修正案つきで指摘） |
 
 ## フォーマット
@@ -27,11 +27,11 @@ ADR（Architecture Decision Record）の作成・改訂・supersede と、コン
 陳腐化する列挙 / Issue・PR 番号 / 付随的な発見・先送り事項 / スケジュール / 作業ログ /
 指標の目的化
 
-詳細は [skills/adr/SKILL.md](skills/adr/SKILL.md) を参照。
+詳細は [skills/manage-adr/SKILL.md](skills/manage-adr/SKILL.md) を参照。
 
 ## 使い方
 
 ```text
-/adr-kit:adr 〜の設計判断を ADR にして
+/adr-kit:manage-adr 〜の設計判断を ADR にして
 ADR をレビューして: docs/adr/0009-test-policy.md   # adr-reviewer が起動
 ```

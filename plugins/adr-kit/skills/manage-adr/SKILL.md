@@ -1,5 +1,5 @@
 ---
-name: adr
+name: manage-adr
 description: Author, update, and supersede Architecture Decision Records with the canonical layout and writing rules
 ---
 

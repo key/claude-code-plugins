@@ -2,7 +2,8 @@
 name: adr-reviewer
 description: >-
   Context-free reviewer for Architecture Decision Records. Use when the user asks to review an ADR
-  ("ADR をレビューして", "ADR レビュー", "この ADR 見て") or right after the adr skill authored one.
+  ("ADR をレビューして", "ADR レビュー", "この ADR 見て") or right after the manage-adr skill
+  authored one.
   Give it the ADR file path(s); it checks layout, frontmatter, and writing-rule violations without
   any conversation context.
 tools: Read, Grep, Glob
