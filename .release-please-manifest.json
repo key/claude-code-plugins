@@ -9,5 +9,5 @@
   "plugins/lint-c": "0.2.0",
   "plugins/secret-scan": "0.1.2",
   "plugins/worktree-guard": "0.2.0",
-  "plugins/madr-toolkit": "0.1.0"
+  "plugins/madr-toolkit": "0.2.0"
 }
