@@ -65,6 +65,24 @@ if the document only makes sense with extra context, that is a finding.
 - Evidence values are dated and appear in exactly one place (flag the same measurement appearing
   twice with different values anywhere in the file or its siblings).
 
+### MADR-derived checks (accuracy of the decision record)
+
+- **Chosen-because**: 決定内容 names the adopted option and its justification together. A decision
+  without justification is a `major` finding.
+- **Drivers traceability**: when 候補案 exist, 背景 states the decision criteria, and each
+  rejection reason traces to a stated criterion. Ad-hoc rejection reasons that appeal to criteria
+  mentioned nowhere else are a finding.
+- **Same abstraction level**: candidates are comparable alternatives (no technology vs
+  architectural-style mixes).
+- **No strawman candidates**: flag candidates that could not actually have solved the problem
+  (pseudo-alternatives padded in for appearance).
+- **Confirmation present**: the ADR states how compliance is verified (gate / lint / review), or
+  explicitly accepts "no detection" as a trade-off. Silent absence is a finding.
+- **Reasoned pros/cons**: bullets in 採用する利点 / 受け入れるトレードオフ without a "because"
+  are `minor` findings.
+- **Single decision**: the ADR records one decision; flag unrelated co-tenant decisions.
+- **Title**: conveys problem + chosen solution (not just a topic noun).
+
 ## Report format (in Japanese)
 
 For each finding: severity (`critical` / `major` / `minor` / `nit`), the quoted text, why it is a

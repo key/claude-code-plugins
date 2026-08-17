@@ -64,10 +64,35 @@ tags: [testing, ci]
 ```
 
 - The H1 number must match the filename number.
+- The title conveys both the problem essence and the chosen solution, so the ADR is findable by
+  either (MADR title guidance). Not just the topic ("キャッシュ" is bad; "セッションを Redis で
+  キャッシュする" is good).
 - 利点/トレードオフ come right after 決定内容 (they describe the adopted decision); 候補案 comes
   after them so rejected-option details do not mix with the adopted one.
 - Each 候補案 subsection: 1-2 sentences describing the candidate, then the rejection reason.
 - Omit a section only when it is truly empty; do not invent content to fill it.
+- One ADR records one decision. If two unrelated decisions emerge, split them.
+
+### 4. MADR-derived writing structure
+
+These come from the MADR template and its known anti-patterns:
+
+- **判断基準 (decision drivers)**: when candidates were weighed, list the criteria (desired
+  qualities, constraints, forces) as bullets in 背景. Rejection reasons must trace back to these
+  criteria, not to ad-hoc arguments invented per candidate.
+- **決定と根拠はセット (chosen-because)**: 決定内容 opens by naming the adopted option and the
+  justification in one breath — "X を採用する。〜のため（判断基準 Y を最もよく満たす）".
+  A decision recorded without its justification is an anti-pattern.
+- **遵守の確認 (confirmation)**: state how compliance with the decision is (or will be) verified —
+  a CI gate, a lint rule, a review checklist item, or explicitly "manual review only". A decision
+  with no way to notice violations is a known failure mode; if none exists, say so as a trade-off.
+- **候補は同じ抽象度で並べる**: do not mix a technology with an architectural style, or a product
+  with a protocol, in the same 候補案 list.
+- **疑似的な代替案を作らない**: never pad 候補案 with options that could not actually solve the
+  problem. If genuinely no alternative existed, write the decision and state why no alternative
+  exists instead of inventing strawmen.
+- **利点・トレードオフには理由を付ける**: every bullet in 採用する利点 / 受け入れるトレードオフ
+  carries its "because" — "〜が良い" alone is not a finding, "〜のため…が良い" is.
 
 ## Writing rules
 
