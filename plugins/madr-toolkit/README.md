@@ -1,4 +1,4 @@
-# adr-kit
+# madr-toolkit
 
 ADR（Architecture Decision Record）の作成・改訂・supersede と、コンテキスト無しレビューを提供する。
 
@@ -33,6 +33,6 @@ ADR（Architecture Decision Record）の作成・改訂・supersede と、コン
 ## 使い方
 
 ```text
-/adr-kit:manage-adr 〜の設計判断を ADR にして
-/adr-kit:review-adr docs/adr/0009-test-policy.md   # adr-reviewer に委譲
+/madr-toolkit:manage-adr 〜の設計判断を ADR にして
+/madr-toolkit:review-adr docs/adr/0009-test-policy.md   # adr-reviewer に委譲
 ```

@@ -106,8 +106,8 @@
         }
       ]
     },
-    "plugins/adr-kit": {
-      "package-name": "adr-kit",
+    "plugins/madr-toolkit": {
+      "package-name": "madr-toolkit",
       "extra-files": [
         {
           "type": "json",

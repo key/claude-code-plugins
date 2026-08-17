@@ -67,10 +67,10 @@
       "source": "./plugins/worktree-guard"
     },
     {
-      "name": "adr-kit",
+      "name": "madr-toolkit",
       "description": "Author and review Architecture Decision Records: canonical layout, MADR-compatible frontmatter, and a context-free review agent",
       "category": "productivity",
-      "source": "./plugins/adr-kit"
+      "source": "./plugins/madr-toolkit"
     }
   ]
 }
