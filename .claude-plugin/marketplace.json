@@ -65,6 +65,12 @@
       "description": "Guard against common git-worktree mistakes: committing in the primary checkout, bulk staging, and worktree creation without an explicit base (PreToolUse)",
       "category": "security",
       "source": "./plugins/worktree-guard"
+    },
+    {
+      "name": "madr-toolkit",
+      "description": "Author and review Architecture Decision Records: canonical layout, MADR-compatible frontmatter, and a context-free review agent",
+      "category": "productivity",
+      "source": "./plugins/madr-toolkit"
     }
   ]
 }
