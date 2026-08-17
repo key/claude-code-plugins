@@ -27,10 +27,12 @@ plugins/
 | `statusline` | env / host / branch / model / context % / rate-limit を 2 行で表示するステータスライン |
 | `lint-markdown` | `*.md` を編集時に rumdl で自動整形 + lint（PostToolUse）。rumdl が必要 |
 | `lint-shell` | `*.sh` を編集時に shellcheck で lint（PostToolUse）。shellcheck が必要 |
-| `lint-yaml` | `*.yml`/`*.yaml` を編集時に yamllint で lint（PostToolUse）。yamllint が必要 |
+| `lint-yaml` | `*.yml`/`*.yaml` を編集時に ryl で lint（PostToolUse）。ryl が設定不足で実行できなければ yamllint にフォールバック。ryl か yamllint が必要 |
 | `lint-python` | `*.py` を編集時に ruff で自動整形 + lint（PostToolUse）。ruff が必要 |
 | `lint-toml` | `*.toml` を編集時に taplo で自動整形 + lint（PostToolUse）。taplo が必要 |
+| `lint-c` | `*.c`/`*.h`/`*.cpp` 等を編集時に clang-format で自動整形（PostToolUse）。clang-format と `.clang-format` が必要 |
 | `secret-scan` | gitleaks でプロンプト/ファイルをスキャンし機密漏洩をブロック。gitleaks が必要 |
+| `worktree-guard` | 主チェックアウトでのコミット・一括ステージ・base 無しの worktree 作成をブロック（PreToolUse）。git と jq が必要 |
 | `madr-toolkit` | ADR の作成スキル（定型レイアウト + 記載ルール）とコンテキスト無しレビューエージェント |
 
 ## ライセンス
