@@ -1,7 +1,7 @@
 {
   "name": "worktree-guard",
   "description": "Guard against common git-worktree mistakes before they happen: committing in the shared primary checkout, bulk staging unrelated changes, and creating worktrees from the current HEAD instead of an explicit base (PreToolUse Bash hook).",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "Mitsukuni Sato"
   },
