@@ -27,7 +27,7 @@ existing ADR. After authoring, recommend a review by the `adr-reviewer` agent (c
 - Number = max existing number + 1, zero-padded to 4 digits. Never reuse numbers.
 - Filename: `NNNN-<english-kebab-slug>.md`. The filename is the single source of the ADR id.
 
-### 2. Frontmatter (MADR-compatible + tags)
+### 2. Frontmatter ([MADR](https://adr.github.io/madr/)-compatible + tags)
 
 ```yaml
 ---

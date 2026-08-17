@@ -1,4 +1,4 @@
-# adr-management
+# adr-kit
 
 ADR（Architecture Decision Record）の作成・改訂・supersede と、コンテキスト無しレビューを提供する。
 
@@ -11,7 +11,9 @@ ADR（Architecture Decision Record）の作成・改訂・supersede と、コン
 
 ## フォーマット
 
-- **frontmatter**: MADR 準拠 + `tags` 拡張（`status` / `date` / `decision-makers` / `tags`）。
+- **frontmatter**: [MADR](https://adr.github.io/madr/) 準拠 + `tags` 拡張
+  （`status` / `date` / `decision-makers` / `tags`）。YAML frontmatter の採用は MADR 自身の
+  [ADR-0013](https://adr.github.io/madr/decisions/0013-use-yaml-front-matter-for-meta-data.html) による。
   id はファイル名（`NNNN-slug.md`）、タイトルは H1、supersede は `status` 値で表現する
 - **本文レイアウト**: 概要 → 背景 → 決定内容 → 採用する利点 → 受け入れるトレードオフ →
   候補案と却下理由（候補ごとにサブセクション） → 見直し条件
@@ -30,6 +32,6 @@ ADR（Architecture Decision Record）の作成・改訂・supersede と、コン
 ## 使い方
 
 ```text
-/adr-management:adr 〜の設計判断を ADR にして
+/adr-kit:adr 〜の設計判断を ADR にして
 ADR をレビューして: docs/adr/0009-test-policy.md   # adr-reviewer が起動
 ```

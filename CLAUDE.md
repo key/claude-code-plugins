@@ -31,7 +31,7 @@ plugins/
 | `lint-python` | `*.py` を編集時に ruff で自動整形 + lint（PostToolUse）。ruff が必要 |
 | `lint-toml` | `*.toml` を編集時に taplo で自動整形 + lint（PostToolUse）。taplo が必要 |
 | `secret-scan` | gitleaks でプロンプト/ファイルをスキャンし機密漏洩をブロック。gitleaks が必要 |
-| `adr-management` | ADR の作成スキル（定型レイアウト + 記載ルール）とコンテキスト無しレビューエージェント |
+| `adr-kit` | ADR の作成スキル（定型レイアウト + 記載ルール）とコンテキスト無しレビューエージェント |
 
 ## ライセンス
 

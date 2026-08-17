@@ -106,8 +106,8 @@
         }
       ]
     },
-    "plugins/adr-management": {
-      "package-name": "adr-management",
+    "plugins/adr-kit": {
+      "package-name": "adr-kit",
       "extra-files": [
         {
           "type": "json",

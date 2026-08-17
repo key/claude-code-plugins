@@ -1,5 +1,5 @@
 {
-  "name": "adr-management",
+  "name": "adr-kit",
   "description": "Author and review Architecture Decision Records: canonical layout, MADR-compatible frontmatter, and a context-free review agent",
   "version": "0.1.0",
   "author": {
