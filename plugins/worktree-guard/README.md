@@ -29,7 +29,21 @@ This is a **best-effort backstop**, not a security boundary. It blocks only when
 it can confidently identify a violating git command (handling `git -C <dir>` and a
 leading `cd <dir> &&`); anything it cannot parse passes through.
 
+## Blocked? read the message
+
+A block prints the repository it resolved, the branch, the linked worktrees you can
+commit from, the commands that get you unstuck, and the option that turns the rule
+off. The repository matters: the hook resolves the target from `git -C <dir>` or a
+leading `cd <dir> &&`, so it is not necessarily the repository the session started in.
+
+Rule 1 has one non-obvious case. If the branch you want is checked out in the primary
+itself, a plain `git worktree add` refuses it (`already checked out`) — pass `--force`,
+commit from the new worktree, then `git reset` in the primary to clear its index.
+
 ## Configuration
+
+Set these in `/plugin` -> `worktree-guard` (the UI is the only place they live; there
+is no config file to edit).
 
 | Option | Default | Meaning |
 |---|---|---|
