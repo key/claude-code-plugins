@@ -105,6 +105,16 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "plugins/adr-management": {
+      "package-name": "adr-management",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }

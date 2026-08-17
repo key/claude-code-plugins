@@ -1,0 +1,17 @@
+{
+  "name": "adr-management",
+  "description": "Author and review Architecture Decision Records: canonical layout, MADR-compatible frontmatter, and a context-free review agent",
+  "version": "0.1.0",
+  "author": {
+    "name": "Mitsukuni Sato"
+  },
+  "repository": "https://github.com/key/key-plugin-cc",
+  "license": "MIT",
+  "keywords": [
+    "adr",
+    "documentation",
+    "architecture",
+    "skill",
+    "agent"
+  ]
+}
