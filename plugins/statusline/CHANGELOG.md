@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/key/key-plugin-cc/compare/statusline-v0.2.0...statusline-v0.3.0) (2026-08-26)
+
+
+### Features
+
+* **statusline:** show the logged-in Claude account, masked by default ([#57](https://github.com/key/key-plugin-cc/issues/57)) ([6c935e0](https://github.com/key/key-plugin-cc/commit/6c935e0ca49896a2f0d294f5d701cf0b84e73043))
+
 ## [0.2.0](https://github.com/key/claude-code-plugins/compare/statusline-v0.1.1...statusline-v0.2.0) (2026-06-24)
 
 
