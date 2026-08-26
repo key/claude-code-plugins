@@ -1,7 +1,7 @@
 {
   "name": "statusline",
   "description": "Two-line statusline showing env, host, branch, worktree, masked account, model, context %, and rate-limit usage",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": {
     "name": "Mitsukuni Sato"
   },
