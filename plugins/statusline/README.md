@@ -1,12 +1,13 @@
 # statusline
 
 Two-line statusline for Claude Code. Shows execution environment,
-host, working directory, git branch, model, context window usage,
-and 5h / 7d rate-limit consumption — each as a fine-grained gradient
-bar.
+host, working directory, git branch, worktree, the logged-in Claude
+account, model, context window usage, and 5h / 7d rate-limit
+consumption — each as a fine-grained gradient bar.
 
 ```text
 📦 DevContainer | 🏠 vscode@d597:workspaces/the-space-memory | 🌿 main
+              | 📧 v***@example.com
 🤖 Claude Sonnet 4.6 | 🧠 ctx ███████░░░ 72%
               | ⏱️ 5h ████░░░░░░ 41% | 📅 7d ██░░░░░░░░ 23%
 ```
@@ -52,6 +53,8 @@ appears at the bottom of the session.
 | `📦 <env>` | `Sandbox` if `SANDBOX_RUNTIME=1` / `CLAUDE_CODE_BUBBLEWRAP=1`; `DevContainer` if `/.dockerenv` exists or `REMOTE_CONTAINERS` is set; otherwise omitted |
 | `🏠 user@host:dir` | `whoami` + `hostname -s` + last two `cwd` segments |
 | `🌿 <branch>` | `git -C <cwd> branch --show-current`; omitted outside a repo |
+| `🌳 <worktree>` | Directory name of a linked git worktree; omitted in the main worktree |
+| `📧 <account>` | `oauthAccount.emailAddress` from `$CLAUDE_CONFIG_DIR/.claude.json` (falling back to `$HOME`); masked by default, omitted when no account is logged in |
 
 ## Line 2
 
@@ -65,6 +68,26 @@ appears at the bottom of the session.
 The bars use 1/8-block characters (`▏▎▍▌▋▊▉█`) for sub-cell
 resolution and recolour green → yellow → red as the percentage
 crosses 50% and 80%.
+
+## Account masking
+
+The `📧` segment tells you which Claude account the session is logged
+in as — useful when `CLAUDE_CONFIG_DIR` is switched between accounts.
+Because a statusline is always on screen, the address is **masked by
+default** so it does not leak during screen sharing or recording.
+
+Set `CLAUDE_STATUSLINE_ACCOUNT` to choose the form:
+
+| Value | Shows | Example |
+|---|---|---|
+| `masked` (default) | First character of the local part, then the domain | `📧 m***@example.com` |
+| `full` | The whole address | `📧 mitsu.sato@example.com` |
+| `domain` | The domain only | `📧 @example.com` |
+| `off` | Nothing — the segment is dropped and the config file is never read | |
+
+The `***` is fixed width, so it does not reveal the length of the
+local part, and a single-character local part is masked whole
+(`📧 ***@example.com`). Any unrecognised value falls back to `masked`.
 
 ## Dependencies
 

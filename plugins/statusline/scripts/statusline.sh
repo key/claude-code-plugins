@@ -1,6 +1,7 @@
 #!/bin/bash
 # Claude Code statusline script
-# Reads JSON from stdin and displays: env | host | dir | branch | worktree | model | ctx | 5h | 7d
+# Reads JSON from stdin and displays:
+#   env | host | dir | branch | worktree | account | model | ctx | 5h | 7d
 
 if ! command -v jq >/dev/null 2>&1; then
   exit 0
@@ -43,6 +44,49 @@ seven_day=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // emp
 
 # Hostname
 host=$(hostname -s 2>/dev/null || hostname)
+
+# Claude login account (switches with CLAUDE_CONFIG_DIR).
+# Display form is controlled by CLAUDE_STATUSLINE_ACCOUNT:
+#   masked (default) | full | domain | off
+account_mode="${CLAUDE_STATUSLINE_ACCOUNT:-masked}"
+account_raw=""
+if [ "$account_mode" != "off" ]; then
+  account_raw=$(jq -r '.oauthAccount.emailAddress // empty' \
+    "${CLAUDE_CONFIG_DIR:-$HOME}/.claude.json" 2>/dev/null)
+fi
+
+# $1=address, $2=mode → formatted address on stdout (empty if nothing to show)
+format_account() {
+  local addr="$1" mode="$2" local_part domain out
+  [ -n "$addr" ] || return 0
+  case "$addr" in
+    ?*@?*) local_part="${addr%%@*}"; domain="${addr#*@}" ;;
+    *)     local_part="$addr"; domain="" ;;
+  esac
+  case "$mode" in
+    full)
+      out="$addr"
+      ;;
+    domain)
+      # Domain only — omit the segment entirely when there is no domain
+      if [ -n "$domain" ]; then out="@${domain}"; fi
+      ;;
+    *)
+      # masked: keep the first character of the local part only.
+      # A single-character local part is masked whole, and the fixed-width
+      # "***" never reveals the original length.
+      if [ "${#local_part}" -le 1 ]; then
+        out="***"
+      else
+        out="${local_part:0:1}***"
+      fi
+      if [ -n "$domain" ]; then out="${out}@${domain}"; fi
+      ;;
+  esac
+  printf '%s' "$out"
+}
+
+account=$(format_account "$account_raw" "$account_mode")
 
 # ANSI colors
 red='\033[31m'
@@ -87,13 +131,14 @@ bar_for_pct() {
 }
 
 # Build output: 2 lines
-# Line 1: env | user@host:dir | branch
+# Line 1: env | user@host:dir | branch | worktree | account
 user=$(whoami 2>/dev/null || echo "$USER")
 line1=""
 if [ -n "$env_label" ]; then line1="📦 ${red}${env_label}${sep} | "; fi
 line1="${line1}🏠 ${cyan}${user}${sep}@${cyan}${host}${sep}:${blue}${short_dir}"
 if [ -n "$branch" ]; then line1="${line1}${sep} | 🌿 ${magenta}${branch}"; fi
 if [ -n "$worktree" ]; then line1="${line1}${sep} | 🌳 ${green}${worktree}"; fi
+if [ -n "$account" ]; then line1="${line1}${sep} | 📧 ${cyan}${account}"; fi
 line1="${line1}${reset}"
 
 # Line 2: model | ctx | 5h | 7d (Fine Bar style)
