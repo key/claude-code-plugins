@@ -24,7 +24,7 @@ plugins/
 | 名前 | 概要 |
 |---|---|
 | `current-datetime` | UserPromptSubmit 時に現在時刻（システム TZ）を context として注入する |
-| `statusline` | env / host / branch / model / context % / rate-limit を 2 行で表示するステータスライン |
+| `statusline` | env / host / branch / worktree / アカウント（既定でマスク）/ model / context % / rate-limit を 2 行で表示するステータスライン |
 | `lint-markdown` | `*.md` を編集時に rumdl で自動整形 + lint（PostToolUse）。rumdl が必要 |
 | `lint-shell` | `*.sh` を編集時に shellcheck で lint（PostToolUse）。shellcheck が必要 |
 | `lint-yaml` | `*.yml`/`*.yaml` を編集時に ryl で lint（PostToolUse）。ryl が設定不足で実行できなければ yamllint にフォールバック。ryl か yamllint が必要 |
